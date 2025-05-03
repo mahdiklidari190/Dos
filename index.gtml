@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی دوز</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            background-color: #333;
+        }
+        
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .cell:hover {
+            background-color: #eee;
+        }
+        
+        .cell.x::before {
+            content: "✕";
+            color: #f44336;
+        }
+        
+        .cell.o::before {
+            content: "○";
+            color: #2196F3;
+        }
+        
+        .message {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .restart:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>بازی دوز</h1>
+    <div class="board" id="board"></div>
+    <div class="message" id="message"></div>
+    <button class="restart" id="restart">شروع مجدد</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const board = document.getElementById('board');
+            const message = document.getElementById('message');
+            const restartButton = document.getElementById('restart');
+            
+            let currentPlayer = 'x';
+            let gameBoard = ['', '', '', '', '', '', '', '', ''];
+            let gameActive = true;
+            
+            // ایجاد صفحه بازی
+            function createBoard() {
+                board.innerHTML = '';
+                for (let i = 0; i < 9; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.setAttribute('data-index', i);
+                    cell.addEventListener('click', handleCellClick);
+                    board.appendChild(cell);
+                }
+            }
+            
+            // مدیریت کلیک روی خانه‌ها
+            function handleCellClick(e) {
+                const index = e.target.getAttribute('data-index');
+                
+                if (gameBoard[index] !== '' || !gameActive) {
+                    return;
+                }
+                
+                gameBoard[index] = currentPlayer;
+                e.target.classList.add(currentPlayer);
+                
+                if (checkWin()) {
+                    message.textContent = `بازیکن ${currentPlayer === 'x' ? '✕' : '○'} برنده شد!`;
+                    gameActive = false;
+                    return;
+                }
+                
+                if (checkDraw()) {
+                    message.textContent = 'بازی مساوی شد!';
+                    gameActive = false;
+                    return;
+                }
+                
+                currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+            }
+            
+            // بررسی برنده
+            function checkWin() {
+                const winPatterns = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // ردیف‌ها
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // ستون‌ها
+                    [0, 4, 8], [2, 4, 6]             // قطرها
+                ];
+                
+                return winPatterns.some(pattern => {
+                    const [a, b, c] = pattern;
+                    return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
+                });
+            }
+            
+            // بررسی مساوی
+            function checkDraw() {
+                return gameBoard.every(cell => cell !== '');
+            }
+            
+            // شروع مجدد بازی
+            function restartGame() {
+                currentPlayer = 'x';
+                gameBoard = ['', '', '', '', '', '', '', '', ''];
+                gameActive = true;
+                message.textContent = '';
+                createBoard();
+            }
+            
+            restartButton.addEventListener('click', restartGame);
+            
+            // شروع بازی
+            createBoard();
+        });
+    </script>
+</body>
+</html>
