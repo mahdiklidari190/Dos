@@ -1,169 +1,276 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بازی دوز</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            font-family: sans-serif;
+            text-align: center;
+            direction: rtl;
             margin: 0;
-            background-color: #f5f5f5;
+            padding: 0;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
+
+        .menu-container {
+            margin-top: 100px;
         }
-        
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 5px;
-            background-color: #333;
-        }
-        
-        .cell {
-            width: 100px;
-            height: 100px;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
+
+        .button {
+            padding: 15px 30px;
+            margin: 15px;
+            font-size: 20px;
             cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .cell:hover {
-            background-color: #eee;
-        }
-        
-        .cell.x::before {
-            content: "✕";
-            color: #f44336;
-        }
-        
-        .cell.o::before {
-            content: "○";
-            color: #2196F3;
-        }
-        
-        .message {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .restart {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            border: none;
+            border-radius: 8px;
             background-color: #4CAF50;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
-        
-        .restart:hover {
+
+        .button:hover {
             background-color: #45a049;
+        }
+
+        .grid_div {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            background-color: blue;
+            width: 210px;
+            height: auto;
+            margin: 50px auto;
+            display: none;
+        }
+
+        .grid_cells {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            margin: 5px;
+            background-color: red;
+            width: 50px;
+            height: 50px;
+            font-size: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            color: darkgreen;
+        }
+
+        #restartBtn {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>بازی دوز</h1>
-    <div class="board" id="board"></div>
-    <div class="message" id="message"></div>
-    <button class="restart" id="restart">شروع مجدد</button>
+    <div id="menu" class="menu-container">
+        <h1>بازی دوز (X-O)</h1>
+        <button class="button" onclick="startGame('cpu', 'easy')">بازی با کامپیوتر (آسان)</button><br>
+        <button class="button" onclick="startGame('cpu', 'hard')">بازی با کامپیوتر (سخت)</button><br>
+        <button class="button" onclick="startGame('2p')">بازی دو نفره</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <div class="grid_div" id="grid">
+            <div id="cell1" class="grid_cells"></div>
+            <div id="cell2" class="grid_cells"></div>
+            <div id="cell3" class="grid_cells"></div>
+            <div id="cell4" class="grid_cells"></div>
+            <div id="cell5" class="grid_cells"></div>
+            <div id="cell6" class="grid_cells"></div>
+            <div id="cell7" class="grid_cells"></div>
+            <div id="cell8" class="grid_cells"></div>
+            <div id="cell9" class="grid_cells"></div>
+        </div>
+        <div class="status" id="statusText"></div>
+        <div class="status" id="turnText"></div>
+        <div class="status">
+            <button id="restartBtn">شروع دوباره</button>
+        </div>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const board = document.getElementById('board');
-            const message = document.getElementById('message');
-            const restartButton = document.getElementById('restart');
-            
-            let currentPlayer = 'x';
-            let gameBoard = ['', '', '', '', '', '', '', '', ''];
-            let gameActive = true;
-            
-            // ایجاد صفحه بازی
-            function createBoard() {
-                board.innerHTML = '';
+        let mode = null;
+        let level = null;
+        let turn = "X";
+        let gameOver = false;
+        const statusText = document.getElementById("statusText");
+        const turnText = document.getElementById("turnText");
+        const restartBtn = document.getElementById("restartBtn");
+        const grid = document.getElementById("grid");
+        const gameContainer = document.getElementById("game");
+        const menuContainer = document.getElementById("menu");
+        const cells = Array.from({ length: 9 }, (_, i) => document.getElementById("cell" + (i + 1)));
+
+        const winningCombos = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // سطرها
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // ستون‌ها
+            [0, 4, 8], [2, 4, 6] // قطری
+        ];
+
+        function startGame(gameMode, gameLevel = null) {
+            mode = gameMode;
+            level = gameLevel;
+            menuContainer.style.display = "none";
+            gameContainer.style.display = "block";
+            grid.style.display = "grid";
+            resetGame();
+        }
+
+        function resetGame() {
+            cells.forEach(cell => cell.textContent = "");
+            gameOver = false;
+            turn = "X";
+            statusText.textContent = "";
+            turnText.textContent = `نوبت ${turn}`;
+            restartBtn.style.display = "none";
+        }
+
+        function getBoard() {
+            return cells.map(c => c.textContent || "");
+        }
+
+        function checkWinner() {
+            for (const [a, b, c] of winningCombos) {
+                if (
+                    cells[a].textContent &&
+                    cells[a].textContent === cells[b].textContent &&
+                    cells[a].textContent === cells[c].textContent
+                ) {
+                    statusText.textContent = `بازیکن ${cells[a].textContent} برنده شد!`;
+                    gameOver = true;
+                    restartBtn.style.display = "inline-block";
+                    return true;
+                }
+            }
+            if (cells.every(cell => cell.textContent !== "")) {
+                statusText.textContent = "بازی مساوی شد!";
+                gameOver = true;
+                restartBtn.style.display = "inline-block";
+                return true;
+            }
+            return false;
+        }
+
+        function easyMove() {
+            let empty = cells.filter(c => c.textContent === "");
+            if (empty.length === 0) return;
+            let rand = empty[Math.floor(Math.random() * empty.length)];
+            rand.textContent = "O";
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            const winner = evaluate(board);
+            if (winner !== null) {
+                return winner * (10 - depth); // وزن‌دهی بر اساس عمق
+            }
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
                 for (let i = 0; i < 9; i++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell');
-                    cell.setAttribute('data-index', i);
-                    cell.addEventListener('click', handleCellClick);
-                    board.appendChild(cell);
+                    if (board[i] === "") {
+                        board[i] = "O";
+                        let score = minimax(board, depth + 1, false);
+                        board[i] = "";
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (board[i] === "") {
+                        board[i] = "X";
+                        let score = minimax(board, depth + 1, true);
+                        board[i] = "";
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function evaluate(board) {
+            for (const [a, b, c] of winningCombos) {
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a] === "O" ? 1 : -1;
                 }
             }
-            
-            // مدیریت کلیک روی خانه‌ها
-            function handleCellClick(e) {
-                const index = e.target.getAttribute('data-index');
-                
-                if (gameBoard[index] !== '' || !gameActive) {
-                    return;
+            if (!board.includes("")) return 0;
+            return null;
+        }
+
+        function hardMove() {
+            let board = getBoard();
+            let bestScore = -Infinity;
+            let move;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === "") {
+                    board[i] = "O";
+                    let score = minimax(board, 0, false);
+                    board[i] = "";
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
                 }
-                
-                gameBoard[index] = currentPlayer;
-                e.target.classList.add(currentPlayer);
-                
-                if (checkWin()) {
-                    message.textContent = `بازیکن ${currentPlayer === 'x' ? '✕' : '○'} برنده شد!`;
-                    gameActive = false;
-                    return;
+            }
+            if (move !== undefined) {
+                cells[move].textContent = "O";
+            }
+        }
+
+        function cpuMove() {
+            if (gameOver) return;
+            if (level === "hard") {
+                hardMove();
+            } else {
+                easyMove();
+            }
+            checkWinner();
+            if (!gameOver) {
+                turn = "X";
+                turnText.textContent = `نوبت ${turn}`;
+            }
+        }
+
+        cells.forEach(cell => {
+            cell.addEventListener("click", () => {
+                if (gameOver || cell.textContent !== "") return;
+
+                if (mode === "2p") {
+                    cell.textContent = turn;
+                    checkWinner();
+                    if (!gameOver) {
+                        turn = turn === "X" ? "O" : "X";
+                        turnText.textContent = `نوبت ${turn}`;
+                    }
+                } else if (mode === "cpu") {
+                    if (turn === "X") {
+                        cell.textContent = "X";
+                        checkWinner();
+                        if (!gameOver) {
+                            turn = "O";
+                            turnText.textContent = `نوبت ${turn}`;
+                            setTimeout(cpuMove, 300);
+                        }
+                    }
                 }
-                
-                if (checkDraw()) {
-                    message.textContent = 'بازی مساوی شد!';
-                    gameActive = false;
-                    return;
-                }
-                
-                currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
-            }
-            
-            // بررسی برنده
-            function checkWin() {
-                const winPatterns = [
-                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // ردیف‌ها
-                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // ستون‌ها
-                    [0, 4, 8], [2, 4, 6]             // قطرها
-                ];
-                
-                return winPatterns.some(pattern => {
-                    const [a, b, c] = pattern;
-                    return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
-                });
-            }
-            
-            // بررسی مساوی
-            function checkDraw() {
-                return gameBoard.every(cell => cell !== '');
-            }
-            
-            // شروع مجدد بازی
-            function restartGame() {
-                currentPlayer = 'x';
-                gameBoard = ['', '', '', '', '', '', '', '', ''];
-                gameActive = true;
-                message.textContent = '';
-                createBoard();
-            }
-            
-            restartButton.addEventListener('click', restartGame);
-            
-            // شروع بازی
-            createBoard();
+            });
+        });
+
+        restartBtn.addEventListener("click", () => {
+            resetGame();
         });
     </script>
 </body>
