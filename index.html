@@ -2,6 +2,7 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بازی دوز</title>
     <style>
         body {
@@ -10,21 +11,27 @@
             direction: rtl;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
 
         .menu-container {
-            margin-top: 100px;
+            margin-top: 10vh;
         }
 
         .button {
-            padding: 15px 30px;
-            margin: 15px;
-            font-size: 20px;
+            padding: 2vh 4vw;
+            margin: 2vh;
+            font-size: 4vw;
             cursor: pointer;
             border: none;
             border-radius: 8px;
             background-color: #4CAF50;
             color: white;
+            width: 80%;
+            max-width: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .button:hover {
@@ -33,42 +40,86 @@
 
         .grid_div {
             display: grid;
-            grid-template-columns: auto auto auto;
+            grid-template-columns: repeat(3, 1fr);
             background-color: blue;
-            width: 210px;
+            width: 90vw;
+            max-width: 300px;
             height: auto;
-            margin: 50px auto;
+            margin: 5vh auto;
             display: none;
+            padding: 2vw;
+            border-radius: 10px;
         }
 
         .grid_cells {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 5px;
-            margin: 5px;
+            padding: 2vw;
+            margin: 2vw;
             background-color: red;
-            width: 50px;
-            height: 50px;
-            font-size: 30px;
+            width: 25vw;
+            max-width: 80px;
+            height: 25vw;
+            max-height: 80px;
+            font-size: 8vw;
             color: white;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 5px;
         }
 
         .status {
             text-align: center;
-            font-size: 24px;
-            margin-top: 20px;
+            font-size: 5vw;
+            margin-top: 2vh;
             color: darkgreen;
         }
 
-        #restartBtn {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin-top: 10px;
+        #restartBtn, #backBtn {
+            font-size: 4vw;
+            padding: 2vh 4vw;
+            margin: 2vh;
             cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
             display: none;
+        }
+
+        #backBtn {
+            background-color: #ff4444;
+        }
+
+        #backBtn:hover {
+            background-color: #cc0000;
+        }
+
+        @media screen and (max-width: 600px) {
+            .menu-container {
+                margin-top: 5vh;
+            }
+
+            .button {
+                font-size: 5vw;
+                padding: 3vh 5vw;
+            }
+
+            .grid_cells {
+                width: 20vw;
+                height: 20vw;
+                font-size: 10vw;
+            }
+
+            .status {
+                font-size: 6vw;
+            }
+
+            #restartBtn, #backBtn {
+                font-size: 5vw;
+                padding: 2vh 5vw;
+            }
         }
     </style>
 </head>
@@ -81,6 +132,7 @@
     </div>
 
     <div id="game" style="display: none;">
+        <button id="backBtn">بازگشت به منو</button>
         <div class="grid_div" id="grid">
             <div id="cell1" class="grid_cells"></div>
             <div id="cell2" class="grid_cells"></div>
@@ -107,6 +159,7 @@
         const statusText = document.getElementById("statusText");
         const turnText = document.getElementById("turnText");
         const restartBtn = document.getElementById("restartBtn");
+        const backBtn = document.getElementById("backBtn");
         const grid = document.getElementById("grid");
         const gameContainer = document.getElementById("game");
         const menuContainer = document.getElementById("menu");
@@ -124,6 +177,7 @@
             menuContainer.style.display = "none";
             gameContainer.style.display = "block";
             grid.style.display = "grid";
+            backBtn.style.display = "inline-block";
             resetGame();
         }
 
@@ -134,6 +188,12 @@
             statusText.textContent = "";
             turnText.textContent = `نوبت ${turn}`;
             restartBtn.style.display = "none";
+        }
+
+        function returnToMenu() {
+            gameContainer.style.display = "none";
+            menuContainer.style.display = "block";
+            resetGame();
         }
 
         function getBoard() {
@@ -172,7 +232,7 @@
         function minimax(board, depth, isMaximizing) {
             const winner = evaluate(board);
             if (winner !== null) {
-                return winner * (10 - depth); // وزن‌دهی بر اساس عمق
+                return winner * (10 - depth);
             }
 
             if (isMaximizing) {
@@ -271,6 +331,10 @@
 
         restartBtn.addEventListener("click", () => {
             resetGame();
+        });
+
+        backBtn.addEventListener("click", () => {
+            returnToMenu();
         });
     </script>
 </body>
