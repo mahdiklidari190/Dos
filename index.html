@@ -35,18 +35,16 @@
         }
 
         .button:hover {
-            background-color: #8103d4;
+            background-color: #5d039d;
         }
 
-         .grid_div {
+        .grid_div {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             background-color: yellow;
             width: 90vw;
             max-width: 300px;
-            height: auto;
             margin: 5vh auto;
-            display: none;
             padding: 2vw;
             border-radius: 10px;
         }
@@ -57,7 +55,7 @@
             align-items: center;
             padding: 2vw;
             margin: 2vw;
-            background-color: Gray;
+            background-color: gray;
             width: 25vw;
             max-width: 80px;
             height: 25vw;
@@ -85,7 +83,6 @@
             border-radius: 8px;
             background-color: #4CAF50;
             color: white;
-            display: none;
         }
 
         #backBtn {
@@ -97,13 +94,8 @@
         }
 
         @media screen and (max-width: 600px) {
-            .menu-container {
-                margin-top: 5vh;
-            }
-
             .button {
                 font-size: 5vw;
-                padding: 3vh 5vw;
             }
 
             .grid_cells {
@@ -118,7 +110,6 @@
 
             #restartBtn, #backBtn {
                 font-size: 5vw;
-                padding: 2vh 5vw;
             }
         }
     </style>
@@ -126,29 +117,27 @@
 <body>
     <div id="menu" class="menu-container">
         <h1>بازی دوز</h1>
-        <button class="button" onclick="startGame('cpu', 'easy')">بازی با بات [آسان]</button><br>
-        <button class="button" onclick="startGame('cpu', 'hard')">بازی با بات [سخت]</button><br>
+        <button class="button" onclick="startGame('cpu', 'easy')">بازی با بات [آسان]</button>
+        <button class="button" onclick="startGame('cpu', 'hard')">بازی با بات [سخت]</button>
         <button class="button" onclick="startGame('2p')">بازی دو نفره</button>
     </div>
 
     <div id="game" style="display: none;">
-        <button id="backBtn">بازگشت به منو</button>
+        <button id="backBtn" onclick="returnToMenu()">بازگشت به منو</button>
         <div class="grid_div" id="grid">
-            <div id="cell1" class="grid_cells"></div>
-            <div id="cell2" class="grid_cells"></div>
-            <div id="cell3" class="grid_cells"></div>
-            <div id="cell4" class="grid_cells"></div>
-            <div id="cell5" class="grid_cells"></div>
-            <div id="cell6" class="grid_cells"></div>
-            <div id="cell7" class="grid_cells"></div>
-            <div id="cell8" class="grid_cells"></div>
-            <div id="cell9" class="grid_cells"></div>
+            <div id="cell1" class="grid_cells" onclick="cellClick(0)"></div>
+            <div id="cell2" class="grid_cells" onclick="cellClick(1)"></div>
+            <div id="cell3" class="grid_cells" onclick="cellClick(2)"></div>
+            <div id="cell4" class="grid_cells" onclick="cellClick(3)"></div>
+            <div id="cell5" class="grid_cells" onclick="cellClick(4)"></div>
+            <div id="cell6" class="grid_cells" onclick="cellClick(5)"></div>
+            <div id="cell7" class="grid_cells" onclick="cellClick(6)"></div>
+            <div id="cell8" class="grid_cells" onclick="cellClick(7)"></div>
+            <div id="cell9" class="grid_cells" onclick="cellClick(8)"></div>
         </div>
         <div class="status" id="statusText"></div>
         <div class="status" id="turnText"></div>
-        <div class="status">
-            <button id="restartBtn">شروع دوباره</button>
-        </div>
+        <button id="restartBtn" onclick="resetGame()">شروع دوباره</button>
     </div>
 
     <script>
@@ -166,9 +155,9 @@
         const cells = Array.from({ length: 9 }, (_, i) => document.getElementById("cell" + (i + 1)));
 
         const winningCombos = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // سطرها
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // ستون‌ها
-            [0, 4, 8], [2, 4, 6] // قطری
+            [0,1,2],[3,4,5],[6,7,8],
+            [0,3,6],[1,4,7],[2,5,8],
+            [0,4,8],[2,4,6]
         ];
 
         function startGame(gameMode, gameLevel = null) {
@@ -176,8 +165,6 @@
             level = gameLevel;
             menuContainer.style.display = "none";
             gameContainer.style.display = "block";
-            grid.style.display = "grid";
-            backBtn.style.display = "inline-block";
             resetGame();
         }
 
@@ -194,6 +181,101 @@
             gameContainer.style.display = "none";
             menuContainer.style.display = "block";
             resetGame();
+        }
+
+        function cellClick(index) {
+            if (gameOver || cells[index].textContent !== "") return;
+
+            if (mode === "2p") {
+                cells[index].textContent = turn;
+                if (checkWinner()) return;
+                turn = turn === "X" ? "O" : "X";
+                turnText.textContent = `نوبت ${turn}`;
+            } else {
+                if (turn === "X") {
+                    cells[index].textContent = "X";
+                    if (checkWinner()) return;
+                    turn = "O";
+                    turnText.textContent = `نوبت بات`;
+                    setTimeout(cpuMove, 500);
+                }
+            }
+        }
+
+        function cpuMove() {
+            if (gameOver) return;
+            if (level === "hard") {
+                hardMove();
+            } else {
+                easyMove();
+            }
+            if (checkWinner()) return;
+            turn = "X";
+            turnText.textContent = `نوبت ${turn}`;
+        }
+
+        function easyMove() {
+            const empty = cells.filter(c => c.textContent === "");
+            if (empty.length === 0) return;
+            const rand = empty[Math.floor(Math.random() * empty.length)];
+            rand.textContent = "O";
+        }
+
+        function hardMove() {
+            const board = getBoard();
+            let bestScore = -Infinity;
+            let move = null;
+
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === "") {
+                    board[i] = "O";
+                    let score = minimax(board, 0, false);
+                    board[i] = "";
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+
+            if (move !== null) cells[move].textContent = "O";
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            const result = evaluate(board);
+            if (result !== null) return result * (10 - depth);
+
+            if (isMaximizing) {
+                let best = -Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (board[i] === "") {
+                        board[i] = "O";
+                        best = Math.max(best, minimax(board, depth + 1, false));
+                        board[i] = "";
+                    }
+                }
+                return best;
+            } else {
+                let best = Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (board[i] === "") {
+                        board[i] = "X";
+                        best = Math.min(best, minimax(board, depth + 1, true));
+                        board[i] = "";
+                    }
+                }
+                return best;
+            }
+        }
+
+        function evaluate(board) {
+            for (const [a, b, c] of winningCombos) {
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a] === "O" ? 1 : -1;
+                }
+            }
+            if (!board.includes("")) return 0;
+            return null;
         }
 
         function getBoard() {
@@ -213,7 +295,7 @@
                     return true;
                 }
             }
-            if (cells.every(cell => cell.textContent !== "")) {
+            if (cells.every(c => c.textContent !== "")) {
                 statusText.textContent = "بازی مساوی شد!";
                 gameOver = true;
                 restartBtn.style.display = "inline-block";
@@ -221,121 +303,6 @@
             }
             return false;
         }
-
-        function easyMove() {
-            let empty = cells.filter(c => c.textContent === "");
-            if (empty.length === 0) return;
-            let rand = empty[Math.floor(Math.random() * empty.length)];
-            rand.textContent = "O";
-        }
-
-        function minimax(board, depth, isMaximizing) {
-            const winner = evaluate(board);
-            if (winner !== null) {
-                return winner * (10 - depth);
-            }
-
-            if (isMaximizing) {
-                let bestScore = -Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (board[i] === "") {
-                        board[i] = "O";
-                        let score = minimax(board, depth + 1, false);
-                        board[i] = "";
-                        bestScore = Math.max(score, bestScore);
-                    }
-                }
-                return bestScore;
-            } else {
-                let bestScore = Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (board[i] === "") {
-                        board[i] = "X";
-                        let score = minimax(board, depth + 1, true);
-                        board[i] = "";
-                        bestScore = Math.min(score, bestScore);
-                    }
-                }
-                return bestScore;
-            }
-        }
-
-        function evaluate(board) {
-            for (const [a, b, c] of winningCombos) {
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    return board[a] === "O" ? 1 : -1;
-                }
-            }
-            if (!board.includes("")) return 0;
-            return null;
-        }
-
-        function hardMove() {
-            let board = getBoard();
-            let bestScore = -Infinity;
-            let move;
-            for (let i = 0; i < 9; i++) {
-                if (board[i] === "") {
-                    board[i] = "O";
-                    let score = minimax(board, 0, false);
-                    board[i] = "";
-                    if (score > bestScore) {
-                        bestScore = score;
-                        move = i;
-                    }
-                }
-            }
-            if (move !== undefined) {
-                cells[move].textContent = "O";
-            }
-        }
-
-        function cpuMove() {
-            if (gameOver) return;
-            if (level === "hard") {
-                hardMove();
-            } else {
-                easyMove();
-            }
-            checkWinner();
-            if (!gameOver) {
-                turn = "X";
-                turnText.textContent = `نوبت ${turn}`;
-            }
-        }
-
-        cells.forEach(cell => {
-            cell.addEventListener("click", () => {
-                if (gameOver || cell.textContent !== "") return;
-
-                if (mode === "2p") {
-                    cell.textContent = turn;
-                    checkWinner();
-                    if (!gameOver) {
-                        turn = turn === "X" ? "O" : "X";
-                        turnText.textContent = `نوبت ${turn}`;
-                    }
-                } else if (mode === "cpu") {
-                    if (turn === "X") {
-                        cell.textContent = "X";
-                        checkWinner();
-                        if (!gameOver) {
-                            turn = "O";
-                            turnText.textContent = `نوبت ${turn}`;
-                            setTimeout(cpuMove, 300);
-                        }
-                    }
-                }
-            });
-        });
-
-        restartBtn.addEventListener("click", () => {
-            resetGame();
-        });
-
-        backBtn.addEventListener("click", () => {
-            returnToMenu();
-        });
     </script>
 </body>
 </html>
