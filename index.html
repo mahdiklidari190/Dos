@@ -29,7 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
-        /* Modern CSS Variables */
+        /* [تمام استایل‌های قبلی بدون تغییر] */
         :root {
             --primary-900: #051f14;
             --primary-800: #0b3b25;
@@ -56,7 +56,6 @@
             --transition-fast: all 0.2s ease;
         }
 
-        /* Global Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -74,7 +73,6 @@
             line-height: 1.6;
         }
 
-        /* Professional Header */
         .header {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -127,7 +125,6 @@
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
 
-        /* Loading Screen - Enhanced */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -223,7 +220,6 @@
             color: var(--accent-gold);
         }
 
-        /* Main Container */
         .container {
             max-width: 540px;
             margin: 50px auto;
@@ -266,7 +262,6 @@
             border-radius: 3px;
         }
 
-        /* Input Groups */
         .input-group {
             margin-bottom: 24px;
             position: relative;
@@ -334,7 +329,6 @@
             box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.25);
         }
 
-        /* Gender Selection */
         .gender-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -376,7 +370,6 @@
             opacity: 0;
         }
 
-        /* Interest Chips with Icons */
         .chips-wrapper {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -421,7 +414,6 @@
             transform: scale(1.2);
         }
 
-        /* File Upload */
         .file-upload-wrapper {
             position: relative;
             overflow: hidden;
@@ -474,7 +466,6 @@
             50% { box-shadow: 0 12px 40px rgba(82, 183, 136, 0.4); }
         }
 
-        /* Messages */
         .error {
             color: var(--error-color);
             font-size: 0.85rem;
@@ -498,7 +489,6 @@
             gap: 8px;
         }
 
-        /* Buttons */
         button {
             width: 100%;
             padding: 18px;
@@ -554,7 +544,6 @@
             transform: none;
         }
 
-        /* Links */
         a {
             color: var(--accent-gold);
             text-decoration: none;
@@ -569,7 +558,6 @@
             text-underline-offset: 4px;
         }
 
-        /* Membership Card - Premium Design */
         .card-wrapper {
             display: flex;
             justify-content: center;
@@ -768,7 +756,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -803,7 +790,6 @@
             border-left: 4px solid var(--success-color);
         }
 
-        /* Loading Spinner */
         .spinner {
             display: inline-block;
             width: 20px;
@@ -818,7 +804,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
         @media (max-width: 580px) {
             .container {
                 margin: 20px 10px;
@@ -1127,44 +1112,46 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts - FIXED -->
     <script>
         // Global Variables
         let db;
         const dbName = "NatureLoversDB_v3";
         const storeName = "Members";
         let currentUser = null;
-        let dbReady = false;
 
-        // Initialize IndexedDB
+        // Initialize IndexedDB with FALLBACK
         function initDB() {
             console.log("Initializing IndexedDB...");
-            const request = indexedDB.open(dbName, 1);
-            
-            request.onupgradeneeded = (e) => {
-                console.log("DB upgrade needed");
-                db = e.target.result;
-                if (!db.objectStoreNames.contains(storeName)) {
-                    db.createObjectStore(storeName, { keyPath: "nationalCode" });
-                    console.log("Object store created");
-                }
-            };
-            
-            request.onsuccess = (e) => {
-                console.log("DB initialized successfully");
-                db = e.target.result;
-                dbReady = true;
-            };
-            
-            request.onerror = (e) => {
-                console.error("خطا در DB:", e.target.error);
-                showToast('خطا در راه‌اندازی پایگاه داده', 'error');
-            };
+            try {
+                const request = indexedDB.open(dbName, 1);
+                
+                request.onupgradeneeded = (e) => {
+                    console.log("DB upgrade needed");
+                    db = e.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        db.createObjectStore(storeName, { keyPath: "nationalCode" });
+                        console.log("Object store created");
+                    }
+                };
+                
+                request.onsuccess = (e) => {
+                    console.log("DB initialized successfully");
+                    db = e.target.result;
+                };
+                
+                request.onerror = (e) => {
+                    console.error("خطا در DB:", e.target.error);
+                    showFallbackToast('خطا در راه‌اندازی پایگاه داده');
+                };
+            } catch (error) {
+                console.error("CRITICAL DB ERROR:", error);
+                showFallbackToast('خطای جدی در پایگاه داده: ' + error.message);
+            }
         }
 
-        // Initialize Persian Datepicker
+        // Initialize Persian Datepicker - FIXED
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("Initializing datepicker...");
             try {
                 $("#birthdate").pDatepicker({
                     format: "YYYY/MM/DD",
@@ -1176,12 +1163,10 @@
                         if (unixDate) {
                             const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
                             document.getElementById('birthdate').value = selectedDate;
-                            document.getElementById('birthdateError').textContent = '✓';
-                            document.getElementById('birthdateError').style.color = 'var(--success-color)';
+                            document.getElementById('birthdateError').textContent = '';
                         }
                     }
                 });
-                console.log("Datepicker initialized");
             } catch (e) {
                 console.error("Datepicker error:", e);
             }
@@ -1189,7 +1174,6 @@
 
         // Loading Screen - 2 Seconds Timer
         window.addEventListener('load', function() {
-            console.log("Page loaded, starting loading screen...");
             const loadingScreen = document.getElementById('loadingScreen');
             const percentage = document.getElementById('loaderPercentage');
             let progress = 0;
@@ -1204,24 +1188,37 @@
                         loadingScreen.classList.add('hidden');
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
-                            console.log("Loading screen hidden");
                         }, 800);
                     }, 200);
                 }
             }, 100);
         });
 
-        // Toast Notification
+        // Toast Notification with FALLBACK
         function showToast(message, type = 'info', duration = 4000) {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
-            document.getElementById('toastContainer').appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
+            try {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+                document.getElementById('toastContainer').appendChild(toast);
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            } catch (e) {
+                // Fallback to alert if toast fails
+                alert(message);
+            }
+        }
+
+        // Fallback toast function
+        function showFallbackToast(message) {
+            try {
+                showToast(message, 'error');
+            } catch (e) {
+                alert(message);
+            }
         }
 
         // Radio Selection
@@ -1240,7 +1237,7 @@
             document.getElementById('interestsError').textContent = '';
         }
 
-        // Image Upload with Error Handling
+        // Image Upload
         document.getElementById('profileImage').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1255,7 +1252,6 @@
                 const preview = document.getElementById('profilePreview');
                 preview.src = e.target.result;
                 preview.style.display = 'block';
-                preview.style.margin = '20px auto 0';
             };
             reader.onerror = () => {
                 showToast('خطا در خواندن تصویر', 'error');
@@ -1374,108 +1370,156 @@
         }
 
         function saveMember(member, callback) {
-            if (!dbReady) {
-                showToast('خطا: پایگاه داده آماده نیست', 'error');
-                return;
+            try {
+                const tx = db.transaction([storeName], 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.put(member).onsuccess = callback;
+            } catch (e) {
+                console.error("Save error:", e);
+                showToast('خطا در ذخیره‌سازی', 'error');
             }
-            const tx = db.transaction([storeName], 'readwrite');
-            const store = tx.objectStore(storeName);
-            store.put(member).onsuccess = callback;
         }
 
         function getMember(nationalCode, callback) {
-            if (!dbReady) {
-                showToast('خطا: پایگاه داده آماده نیست', 'error');
-                return;
+            try {
+                const tx = db.transaction([storeName], 'readonly');
+                const store = tx.objectStore(storeName);
+                store.get(nationalCode).onsuccess = (e) => callback(e.target.result);
+            } catch (e) {
+                console.error("Get error:", e);
+                showToast('خطا در بازیابی اطلاعات', 'error');
             }
-            const tx = db.transaction([storeName], 'readonly');
-            const store = tx.objectStore(storeName);
-            store.get(nationalCode).onsuccess = (e) => callback(e.target.result);
         }
 
-        // FIXED: Register Function with proper error handling
+        // FIXED: Register Function
         function register() {
-            console.log("Register button clicked");
+            console.log("=== REGISTER BUTTON CLICKED ===");
             
-            if (!dbReady) {
-                showToast('لطفاً چند لحظه صبر کنید...', 'info');
-                return;
-            }
-
-            const allValid = Object.keys(validators).every(key => {
-                console.log(`Validating ${key}...`);
-                return validators[key]();
-            });
-            
-            if (!allValid) {
-                showToast('لطفاً تمام فیلدهای الزامی را کامل کنید', 'error');
-                return;
-            }
-
-            const member = {
-                name: document.getElementById('name').value.trim(),
-                family: document.getElementById('family').value.trim(),
-                nationalCode: document.getElementById('nationalCode').value.trim(),
-                birthdate: document.getElementById('birthdate').value,
-                phone: document.getElementById('phone').value.trim(),
-                gender: document.querySelector('input[name="gender"]:checked').value,
-                education: document.getElementById('education').value.trim(),
-                address: document.getElementById('address').value.trim(),
-                experience: document.getElementById('experience').value.trim(),
-                interests: getSelectedInterests(),
-                imageData: document.getElementById('profilePreview').src,
-                ...generateDates()
-            };
-
+            // Show loading state immediately
             const btn = document.getElementById('registerBtn');
-            btn.innerHTML = '<div class="spinner"></div> در حال ثبت...';
+            btn.innerHTML = '<div class="spinner"></div> در حال بررسی...';
             btn.disabled = true;
+            
+            // Check if DB is ready
+            if (!db) {
+                console.log("DB not ready, waiting...");
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
+                    btn.disabled = false;
+                    showToast('لطفاً چند ثانیه دیگر امتحان کنید', 'info');
+                }, 1000);
+                return;
+            }
 
-            getMember(member.nationalCode, (existing) => {
-                if (existing) {
-                    showToast('⚠️ این کد ملی قبلاً ثبت‌نام شده است', 'error');
-                } else {
-                    saveMember(member, () => {
-                        showToast('✅ ثبت‌نام با موفقیت انجام شد!', 'success');
-                        setTimeout(() => showLogin(), 2000);
-                    });
+            try {
+                // Validate all fields
+                let validationFailed = false;
+                Object.keys(validators).forEach(key => {
+                    const result = validators[key]();
+                    console.log(`Validation ${key}: ${result}`);
+                    if (!result) validationFailed = true;
+                });
+                
+                if (validationFailed) {
+                    btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
+                    btn.disabled = false;
+                    showToast('لطفاً تمام فیلدهای الزامی را کامل کنید', 'error');
+                    return;
                 }
+
+                // Create member object
+                const member = {
+                    name: document.getElementById('name').value.trim(),
+                    family: document.getElementById('family').value.trim(),
+                    nationalCode: document.getElementById('nationalCode').value.trim(),
+                    birthdate: document.getElementById('birthdate').value,
+                    phone: document.getElementById('phone').value.trim(),
+                    gender: document.querySelector('input[name="gender"]:checked').value,
+                    education: document.getElementById('education').value.trim(),
+                    address: document.getElementById('address').value.trim(),
+                    experience: document.getElementById('experience').value.trim(),
+                    interests: getSelectedInterests(),
+                    imageData: document.getElementById('profilePreview').src,
+                    ...generateDates()
+                };
+
+                console.log("Member object created:", member);
+
+                // Check if user exists
+                getMember(member.nationalCode, (existing) => {
+                    console.log("Check existing:", existing);
+                    if (existing) {
+                        btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
+                        btn.disabled = false;
+                        showToast('⚠️ این کد ملی قبلاً ثبت‌نام شده است', 'error');
+                    } else {
+                        saveMember(member, () => {
+                            btn.innerHTML = '<i class="fas fa-check"></i> ثبت‌نام موفق!';
+                            showToast('✅ ثبت‌نام با موفقیت انجام شد!', 'success');
+                            setTimeout(() => {
+                                showLogin();
+                                // Reset button
+                                btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
+                                btn.disabled = false;
+                            }, 2000);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error("CRITICAL ERROR in register:", error);
                 btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
                 btn.disabled = false;
-            });
+                showToast('خطای جدی: ' + error.message, 'error');
+            }
         }
 
-        // FIXED: Login Function with proper error handling
+        // FIXED: Login Function
         function login() {
-            console.log("Login button clicked");
+            console.log("=== LOGIN BUTTON CLICKED ===");
             
-            if (!dbReady) {
-                showToast('لطفاً چند لحظه صبر کنید...', 'info');
-                return;
-            }
-
-            const code = document.getElementById('loginNationalCode').value.trim();
-            if (!/^\d{10}$/.test(code)) {
-                showToast('کد ملی معتبر نیست (باید ۱۰ رقم باشد)', 'error');
-                return;
-            }
-
             const btn = document.getElementById('loginBtn');
             btn.innerHTML = '<div class="spinner"></div> در حال ورود...';
             btn.disabled = true;
+            
+            // Check if DB is ready
+            if (!db) {
+                console.log("DB not ready");
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
+                    btn.disabled = false;
+                    showToast('لطفاً چند ثانیه دیگر امتحان کنید', 'info');
+                }, 1000);
+                return;
+            }
 
-            getMember(code, (member) => {
-                if (member) {
-                    currentUser = member;
-                    showDashboard();
-                    generateIDCard();
-                    showToast('✅ ورود موفقیت‌آمیز', 'success');
-                } else {
-                    showToast('کاربری با این کد ملی یافت نشد', 'error');
+            try {
+                const code = document.getElementById('loginNationalCode').value.trim();
+                if (!/^\d{10}$/.test(code)) {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
+                    btn.disabled = false;
+                    showToast('کد ملی معتبر نیست (باید ۱۰ رقم باشد)', 'error');
+                    return;
                 }
+
+                getMember(code, (member) => {
+                    console.log("Login result:", member);
+                    if (member) {
+                        currentUser = member;
+                        showDashboard();
+                        generateIDCard();
+                        showToast('✅ ورود موفقیت‌آمیز', 'success');
+                    } else {
+                        showToast('کاربری با این کد ملی یافت نشد', 'error');
+                    }
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
+                    btn.disabled = false;
+                });
+            } catch (error) {
+                console.error("CRITICAL ERROR in login:", error);
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
                 btn.disabled = false;
-            });
+                showToast('خطای جدی: ' + error.message, 'error');
+            }
         }
 
         function showSignup() {
@@ -1572,10 +1616,18 @@
                 });
             });
             
-            // Log that everything is ready
-            setTimeout(() => {
-                console.log("Application ready. DB Ready:", dbReady);
-            }, 1000);
+            // IMPORTANT: Force button to work even if clicked before DB is ready
+            document.getElementById('registerBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                register();
+            });
+            
+            document.getElementById('loginBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                login();
+            });
+            
+            console.log("All event listeners attached");
         };
     </script>
 </body>
