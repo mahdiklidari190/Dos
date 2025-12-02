@@ -1,308 +1,1207 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی دوز</title>
+    <title>انجمن دوستداران طبیعت خراسان شمالی | عضویت رسمی</title>
+    
+    <!-- Vazirmatn Font (All Weights) -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Persian Datepicker CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css" rel="stylesheet">
+    
+    <!-- jQuery (Required for Persian Datepicker) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Persian Date + Datepicker -->
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            direction: rtl;
+        :root {
+            --primary-dark: #1b4332;
+            --primary-mid: #2d6a4f;
+            --primary-light: #40916c;
+            --primary-accent: #52b788;
+            --bg-gradient-start: #081c15;
+            --bg-gradient-mid: #1b4332;
+            --bg-gradient-end: #2d6a4f;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --error-color: #ff6b6b;
+            --success-color: #52b788;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
 
-        .menu-container {
-            margin-top: 10vh;
-        }
-
-        .button {
-            padding: 2vh 4vw;
-            margin: 2vh;
-            font-size: 4vw;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            background-color: #8103d4;
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
             color: white;
-            width: 80%;
-            max-width: 300px;
+            min-height: 100vh;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        /* Professional Header */
+        .header {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 25px 20px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-accent);
+            object-fit: cover;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .header-text h1 {
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+            letter-spacing: -0.5px;
+        }
+
+        .header-text p {
+            font-weight: 300;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            max-width: 520px;
+            margin: 40px auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            animation: fadeIn 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        label {
             display: block;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
         }
 
-        .button:hover {
-            background-color: #5d039d;
+        .input-wrapper {
+            position: relative;
         }
 
-        .grid_div {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            background-color: yellow;
-            width: 90vw;
-            max-width: 300px;
-            margin: 5vh auto;
-            padding: 2vw;
-            border-radius: 10px;
+        .input-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-accent);
+            font-size: 1.2rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
         }
 
-        .grid_cells {
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 16px 50px 16px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.25);
+        }
+
+        /* Gender Radio Buttons */
+        .gender-container {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .radio-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .radio-wrapper:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-accent);
+        }
+
+        .radio-wrapper input[type="radio"] {
+            width: auto;
+            margin: 0;
+            accent-color: var(--primary-accent);
+        }
+
+        /* Interest Chips */
+        .interests-container {
+            margin-top: 18px;
+        }
+
+        .chips-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.85rem;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chip.selected {
+            background: var(--primary-accent);
+            border-color: var(--primary-accent);
+            color: var(--primary-dark);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(82, 183, 136, 0.3);
+        }
+
+        /* File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .file-upload-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        #profileImage {
+            position: absolute;
+            left: -9999px;
+        }
+
+        #profilePreview {
+            display: none;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-accent);
+            margin: 18px auto 0;
+            object-fit: cover;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Messages */
+        .error {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            min-height: 20px;
+            font-weight: 500;
+        }
+
+        .success {
+            color: var(--success-color);
+            font-weight: 600;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 14px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(82, 183, 136, 0.4);
+            filter: brightness(1.05);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Links */
+        a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: white;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* Membership Card */
+        .card-wrapper {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 2vw;
-            margin: 2vw;
-            background-color: gray;
-            width: 25vw;
-            max-width: 80px;
-            height: 25vw;
-            max-height: 80px;
-            font-size: 8vw;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
+            margin: 25px 0;
         }
 
-        .status {
+        .membership-card {
+            width: 380px;
+            height: 600px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            color: #212529;
+            direction: rtl;
+            text-align: right;
+            transform: scale(0.98);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .membership-card:hover {
+            transform: scale(1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary-mid) 100%);
+            padding: 25px 20px;
             text-align: center;
-            font-size: 5vw;
-            margin-top: 2vh;
-            color: darkgreen;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        #restartBtn, #backBtn {
-            font-size: 4vw;
-            padding: 2vh 4vw;
-            margin: 2vh;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
+        .card-logo {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin: 0 auto 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+        }
+
+        .card-title {
             color: white;
+            font-weight: 800;
+            font-size: 1.15rem;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
-        #backBtn {
-            background-color: #ff4444;
+        .card-body {
+            padding: 30px;
+            position: relative;
+            height: calc(100% - 150px);
+            display: flex;
+            flex-direction: column;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><path d="M50,50 Q100,30 150,50 Q170,100 150,150 Q100,170 50,150 Q30,100 50,50Z" fill="%231b4332" opacity="0.03"/></svg>') center no-repeat;
+            background-size: 180px;
         }
 
-        #backBtn:hover {
-            background-color: #cc0000;
+        .photo-frame {
+            width: 135px;
+            height: 135px;
+            border: 5px solid var(--primary-accent);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            padding: 5px;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
         }
 
-        @media screen and (max-width: 600px) {
-            .button {
-                font-size: 5vw;
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary-accent));
+            z-index: -1;
+        }
+
+        .card-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card-field {
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .field-label {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.88rem;
+        }
+
+        .field-value {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            border: 1px dashed var(--primary-accent);
+        }
+
+        #qrcode {
+            margin: 0 auto;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .signature-section {
+            margin-top: auto;
+            text-align: left;
+            padding-top: 20px;
+        }
+
+        .signature-line {
+            width: 160px;
+            height: 2px;
+            background: linear-gradient(to left, transparent, #333, transparent);
+            margin-bottom: 5px;
+        }
+
+        .signature-text {
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .card-footer {
+            background: var(--primary-dark);
+            padding: 12px;
+            text-align: center;
+            border-top: 3px solid var(--primary-accent);
+        }
+
+        .card-footer p {
+            color: white;
+            font-size: 0.8rem;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 540px) {
+            .container {
+                margin: 20px 10px;
+                padding: 25px;
             }
 
-            .grid_cells {
-                width: 20vw;
-                height: 20vw;
-                font-size: 10vw;
+            .header-text h1 {
+                font-size: 1.5rem;
             }
 
-            .status {
-                font-size: 6vw;
+            .header-text p {
+                font-size: 0.95rem;
             }
 
-            #restartBtn, #backBtn {
-                font-size: 5vw;
+            .membership-card {
+                width: 100%;
+                max-width: 360px;
+                height: auto;
+                aspect-ratio: 380/600;
             }
         }
     </style>
 </head>
 <body>
-    <div id="menu" class="menu-container">
-        <h1>بازی دوز</h1>
-        <button class="button" onclick="startGame('cpu', 'easy')">بازی با بات [آسان]</button>
-        <button class="button" onclick="startGame('cpu', 'hard')">بازی با بات [سخت]</button>
-        <button class="button" onclick="startGame('2p')">بازی دو نفره</button>
-    </div>
-
-    <div id="game" style="display: none;">
-        <button id="backBtn" onclick="returnToMenu()">بازگشت به منو</button>
-        <div class="grid_div" id="grid">
-            <div id="cell1" class="grid_cells" onclick="cellClick(0)"></div>
-            <div id="cell2" class="grid_cells" onclick="cellClick(1)"></div>
-            <div id="cell3" class="grid_cells" onclick="cellClick(2)"></div>
-            <div id="cell4" class="grid_cells" onclick="cellClick(3)"></div>
-            <div id="cell5" class="grid_cells" onclick="cellClick(4)"></div>
-            <div id="cell6" class="grid_cells" onclick="cellClick(5)"></div>
-            <div id="cell7" class="grid_cells" onclick="cellClick(6)"></div>
-            <div id="cell8" class="grid_cells" onclick="cellClick(7)"></div>
-            <div id="cell9" class="grid_cells" onclick="cellClick(8)"></div>
+    <!-- Professional Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="logo.png" alt="لوگوی انجمن دوستداران طبیعت خراسان شمالی" class="logo">
+            <div class="header-text">
+                <h1>انجمن دوستداران طبیعت خراسان شمالی</h1>
+                <p>عضویت رسمی و صدور کارت شناسایی دیجیتال</p>
+            </div>
         </div>
-        <div class="status" id="statusText"></div>
-        <div class="status" id="turnText"></div>
-        <button id="restartBtn" onclick="resetGame()">شروع دوباره</button>
+    </header>
+
+    <!-- Main Container with Glassmorphism Effect -->
+    <div class="container">
+        <!-- Sign Up Section -->
+        <div id="signup">
+            <h2>ثبت‌نام در انجمن</h2>
+            
+            <div class="input-group">
+                <label for="name">نام</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="name" placeholder="مثال: علی" autocomplete="off">
+                </div>
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="family">نام خانوادگی</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-tag input-icon"></i>
+                    <input type="text" id="family" placeholder="مثال: احمدی" autocomplete="off">
+                </div>
+                <div class="error" id="familyError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="nationalCode">کد ملی (کد عضویت)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-id-card input-icon"></i>
+                    <input type="text" id="nationalCode" placeholder="۱۰ رقم بدون خط تیره" maxlength="10" autocomplete="off">
+                </div>
+                <div class="error" id="nationalCodeError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="birthdate">تاریخ تولد (هجری شمسی)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar-alt input-icon"></i>
+                    <input type="text" id="birthdate" placeholder="برای انتخاب تاریخ کلیک کنید" readonly>
+                </div>
+                <div class="error" id="birthdateError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">شماره تماس همراه</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" maxlength="11" autocomplete="off">
+                </div>
+                <div class="error" id="phoneError"></div>
+            </div>
+
+            <div class="input-group">
+                <label>جنسیت</label>
+                <div class="gender-container">
+                    <div class="radio-wrapper">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">مرد</label>
+                    </div>
+                    <div class="radio-wrapper">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">زن</label>
+                    </div>
+                </div>
+                <div class="error" id="genderError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="education">تحصیلات</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-graduation-cap input-icon"></i>
+                    <input type="text" id="education" placeholder="مثال: کارشناسی محیط زیست">
+                </div>
+                <div class="error" id="educationError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="address">آدرس محل زندگی</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <textarea id="address" rows="3" placeholder="نشانی کامل با کد پستی"></textarea>
+                </div>
+                <div class="error" id="addressError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="experience">سابقه فعالیت محیط زیستی (سال)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-history input-icon"></i>
+                    <input type="number" id="experience" placeholder="۰" min="0">
+                </div>
+                <div class="error" id="experienceError"></div>
+            </div>
+
+            <div class="input-group">
+                <label>علاقه‌مندی به فعالیت در کدام بخش‌ها؟</label>
+                <div class="chips-wrapper">
+                    <div class="chip" data-value="1">محیط زیست طبیعی</div>
+                    <div class="chip" data-value="2">محیط زیست انسانی</div>
+                    <div class="chip" data-value="3">منابع طبیعی</div>
+                    <div class="chip" data-value="4">آموزش و توانمندسازی</div>
+                    <div class="chip" data-value="5">تولید محتوا</div>
+                    <div class="chip" data-value="6">هنر و محیط زیست</div>
+                    <div class="chip" data-value="7">ورزش و محیط زیست</div>
+                    <div class="chip" data-value="8">جوانان و محیط زیست</div>
+                    <div class="chip" data-value="9">کودکان و نوجوانان</div>
+                    <div class="chip" data-value="10">هوش مصنوعی</div>
+                    <div class="chip" data-value="11">فضای مجازی</div>
+                    <div class="chip" data-value="12">تالاب‌ها</div>
+                </div>
+                <div class="error" id="interestsError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="profileImage">عکس پرسنلی (اجباری)</label>
+                <div class="file-upload-wrapper">
+                    <label for="profileImage" class="file-upload-button">
+                        <i class="fas fa-camera"></i> انتخاب تصویر
+                    </label>
+                    <input type="file" id="profileImage" accept="image/*">
+                </div>
+                <img id="profilePreview" alt="پیش‌نمایش عکس">
+            </div>
+
+            <div class="success" id="signupSuccess"></div>
+            <div class="error" id="signupError"></div>
+
+            <button onclick="register()">
+                <i class="fas fa-user-plus"></i> تکمیل ثبت‌نام
+            </button>
+            
+            <p style="text-align: center; margin-top: 20px; font-weight: 500;">
+                قبلاً ثبت‌نام کرده‌اید؟ <a href="#" onclick="showLogin()">ورود به پنل کاربری</a>
+            </p>
+        </div>
+
+        <!-- Login Section -->
+        <div id="login" style="display: none;">
+            <h2>ورود به پنل کاربری</h2>
+            
+            <div class="input-group">
+                <label for="loginNationalCode">کد ملی (کد عضویت)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-key input-icon"></i>
+                    <input type="text" id="loginNationalCode" placeholder="۱۰ رقم" maxlength="11" autocomplete="off">
+                </div>
+                <div class="error" id="loginError"></div>
+            </div>
+
+            <button onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> ورود
+            </button>
+            
+            <p style="text-align: center; margin-top: 20px; font-weight: 500;">
+                هنوز عضو نشده‌اید؟ <a href="#" onclick="showSignup()">ثبت‌نام جدید</a>
+            </p>
+        </div>
+
+        <!-- Dashboard with Professional Membership Card -->
+        <div id="dashboard" style="display: none;">
+            <h2>کارت عضویت دیجیتال شما</h2>
+            
+            <div class="card-wrapper">
+                <div id="membershipCard" class="membership-card">
+                    <div class="card-header">
+                        <img src="logo.png" alt="لوگوی انجمن" class="card-logo">
+                        <h3 class="card-title">کارت عضویت رسمی</h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="watermark">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        
+                        <div class="photo-frame">
+                            <img id="cardPhoto" src="" alt="عکس عضو" class="card-photo">
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">نام و نام خانوادگی:</span>
+                            <span class="field-value" id="cardName"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">کد عضویت:</span>
+                            <span class="field-value" id="cardNationalCode"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">تاریخ صدور:</span>
+                            <span class="field-value" id="cardIssueDate"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">تاریخ انقضا:</span>
+                            <span class="field-value" id="cardExpiryDate"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">حوزه فعالیت:</span>
+                            <span class="field-value" id="cardInterests"></span>
+                        </div>
+
+                        <div class="qr-section">
+                            <div id="qrcode"></div>
+                            <p style="font-size: 0.7rem; color: #6c757d; margin-top: 8px;">اسکن برای تأیید اعتبار</p>
+                        </div>
+
+                        <div class="signature-section">
+                            <div class="signature-line"></div>
+                            <div class="signature-text">امضای رئیس انجمن</div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <p>انجمن دوستداران طبیعت خراسان شمالی | اعتبار ۳ ساله</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 25px;">
+                <button onclick="downloadIDCard()" style="flex: 1;">
+                    <i class="fas fa-download"></i> دانلود کارت (PNG)
+                </button>
+                <button onclick="logout()" class="secondary-button" style="flex: 1;">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        let mode = null;
-        let level = null;
-        let turn = "X";
-        let gameOver = false;
-        const statusText = document.getElementById("statusText");
-        const turnText = document.getElementById("turnText");
-        const restartBtn = document.getElementById("restartBtn");
-        const backBtn = document.getElementById("backBtn");
-        const grid = document.getElementById("grid");
-        const gameContainer = document.getElementById("game");
-        const menuContainer = document.getElementById("menu");
-        const cells = Array.from({ length: 9 }, (_, i) => document.getElementById("cell" + (i + 1)));
+        let db;
+        const dbName = "NatureLoversDB";
+        const storeName = "Members";
+        let currentUser = null;
 
-        const winningCombos = [
-            [0,1,2],[3,4,5],[6,7,8],
-            [0,3,6],[1,4,7],[2,5,8],
-            [0,4,8],[2,4,6]
-        ];
-
-        function startGame(gameMode, gameLevel = null) {
-            mode = gameMode;
-            level = gameLevel;
-            menuContainer.style.display = "none";
-            gameContainer.style.display = "block";
-            resetGame();
-        }
-
-        function resetGame() {
-            cells.forEach(cell => cell.textContent = "");
-            gameOver = false;
-            turn = "X";
-            statusText.textContent = "";
-            turnText.textContent = `نوبت ${turn}`;
-            restartBtn.style.display = "none";
-        }
-
-        function returnToMenu() {
-            gameContainer.style.display = "none";
-            menuContainer.style.display = "block";
-            resetGame();
-        }
-
-        function cellClick(index) {
-            if (gameOver || cells[index].textContent !== "") return;
-
-            if (mode === "2p") {
-                cells[index].textContent = turn;
-                if (checkWinner()) return;
-                turn = turn === "X" ? "O" : "X";
-                turnText.textContent = `نوبت ${turn}`;
-            } else {
-                if (turn === "X") {
-                    cells[index].textContent = "X";
-                    if (checkWinner()) return;
-                    turn = "O";
-                    turnText.textContent = `نوبت بات`;
-                    setTimeout(cpuMove, 500);
+        // Initialize IndexedDB
+        function initDB() {
+            const request = indexedDB.open(dbName, 1);
+            request.onupgradeneeded = function(event) {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName, { keyPath: "nationalCode" });
                 }
-            }
+            };
+            request.onsuccess = function(event) {
+                db = event.target.result;
+            };
+            request.onerror = function(event) {
+                console.error("خطا در باز کردن پایگاه داده:", event.target.error);
+            };
         }
 
-        function cpuMove() {
-            if (gameOver) return;
-            if (level === "hard") {
-                hardMove();
-            } else {
-                easyMove();
-            }
-            if (checkWinner()) return;
-            turn = "X";
-            turnText.textContent = `نوبت ${turn}`;
-        }
-
-        function easyMove() {
-            const empty = cells.filter(c => c.textContent === "");
-            if (empty.length === 0) return;
-            const rand = empty[Math.floor(Math.random() * empty.length)];
-            rand.textContent = "O";
-        }
-
-        function hardMove() {
-            const board = getBoard();
-            let bestScore = -Infinity;
-            let move = null;
-
-            for (let i = 0; i < 9; i++) {
-                if (board[i] === "") {
-                    board[i] = "O";
-                    let score = minimax(board, 0, false);
-                    board[i] = "";
-                    if (score > bestScore) {
-                        bestScore = score;
-                        move = i;
-                    }
+        // Initialize Persian Datepicker
+        $(document).ready(function() {
+            $("#birthdate").pDatepicker({
+                format: "YYYY/MM/DD",
+                autoClose: true,
+                calendarType: 'jalali',
+                initialValue: false,
+                onSelect: function(unix) {
+                    const selectedDate = new persianDate(unix).format("YYYY/MM/DD");
+                    document.getElementById("birthdate").value = selectedDate;
                 }
-            }
+            });
+        });
 
-            if (move !== null) cells[move].textContent = "O";
-        }
+        // Interest Chips Selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const chips = document.querySelectorAll('.chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    document.getElementById('interestsError').textContent = '';
+                });
+            });
+        });
 
-        function minimax(board, depth, isMaximizing) {
-            const result = evaluate(board);
-            if (result !== null) return result * (10 - depth);
-
-            if (isMaximizing) {
-                let best = -Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (board[i] === "") {
-                        board[i] = "O";
-                        best = Math.max(best, minimax(board, depth + 1, false));
-                        board[i] = "";
-                    }
+        // Image Upload with Preview
+        document.getElementById('profileImage').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('حجم تصویر نباید بیشتر از ۲ مگابایت باشد');
+                    return;
                 }
-                return best;
-            } else {
-                let best = Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (board[i] === "") {
-                        board[i] = "X";
-                        best = Math.min(best, minimax(board, depth + 1, true));
-                        board[i] = "";
-                    }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('profilePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Validation Functions
+        function validateName() {
+            const name = document.getElementById('name').value.trim();
+            const error = document.getElementById('nameError');
+            if (!name) {
+                error.textContent = '❌ نام الزامی است';
+                return false;
+            } else if (!/^[\u0600-\u06FF\s]+$/.test(name)) {
+                error.textContent = '❌ نام باید فقط شامل حروف فارسی باشد';
+                return false;
+            }
+            error.textContent = '✓';
+            error.style.color = 'var(--success-color)';
+            return true;
+        }
+
+        function validateFamily() {
+            const family = document.getElementById('family').value.trim();
+            const error = document.getElementById('familyError');
+            if (!family) {
+                error.textContent = '❌ نام خانوادگی الزامی است';
+                return false;
+            } else if (!/^[\u0600-\u06FF\s]+$/.test(family)) {
+                error.textContent = '❌ نام خانوادگی باید فقط شامل حروف فارسی باشد';
+                return false;
+            }
+            error.textContent = '✓';
+            error.style.color = 'var(--success-color)';
+            return true;
+        }
+
+        function validateNationalCode() {
+            const code = document.getElementById('nationalCode').value.trim();
+            const error = document.getElementById('nationalCodeError');
+            if (!code) {
+                error.textContent = '❌ کد ملی الزامی است';
+                return false;
+            } else if (!/^\d{10}$/.test(code)) {
+                error.textContent = '❌ کد ملی باید دقیقاً ۱۰ رقم باشد';
+                return false;
+            }
+            // Calculate validation digit
+            const weights = [10,9,8,7,6,5,4,3,2];
+            let sum = 0;
+            for(let i=0; i<9; i++) {
+                sum += parseInt(code[i]) * weights[i];
+            }
+            const remainder = sum % 11;
+            const check = remainder < 2 ? remainder : 11 - remainder;
+            if (parseInt(code[9]) !== check) {
+                error.textContent = '❌ کد ملی معتبر نیست';
+                return false;
+            }
+            error.textContent = '✓';
+            error.style.color = 'var(--success-color)';
+            return true;
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById('phone').value.trim();
+            const error = document.getElementById('phoneError');
+            if (!phone) {
+                error.textContent = '❌ شماره تماس الزامی است';
+                return false;
+            } else if (!/^09\d{9}$/.test(phone)) {
+                error.textContent = '❌ شماره باید با ۰۹ شروع و ۱۱ رقم باشد';
+                return false;
+            }
+            error.textContent = '✓';
+            error.style.color = 'var(--success-color)';
+            return true;
+        }
+
+        function validateRequiredField(fieldId, errorId, message) {
+            const value = document.getElementById(fieldId).value.trim();
+            const error = document.getElementById(errorId);
+            if (!value) {
+                error.textContent = `❌ ${message}`;
+                return false;
+            }
+            error.textContent = '✓';
+            error.style.color = 'var(--success-color)';
+            return true;
+        }
+
+        // Add real-time validation
+        document.getElementById('name').addEventListener('input', validateName);
+        document.getElementById('family').addEventListener('input', validateFamily);
+        document.getElementById('nationalCode').addEventListener('input', validateNationalCode);
+        document.getElementById('phone').addEventListener('input', validatePhone);
+
+        // Get Selected Interests
+        function getSelectedInterests() {
+            const selected = document.querySelectorAll('.chip.selected');
+            return Array.from(selected).map(chip => chip.dataset.value);
+        }
+
+        // Convert Interests to Persian
+        function getInterestText(value) {
+            const interests = {
+                '1': 'محیط زیست طبیعی',
+                '2': 'محیط زیست انسانی',
+                '3': 'منابع طبیعی',
+                '4': 'آموزش و توانمندسازی',
+                '5': 'تولید محتوا',
+                '6': 'هنر و محیط زیست',
+                '7': 'ورزش و محیط زیست',
+                '8': 'جوانان و محیط زیست',
+                '9': 'کودکان و نوجوانان',
+                '10': 'هوش مصنوعی',
+                '11': 'فضای مجازی',
+                '12': 'تالاب‌ها'
+            };
+            return interests[value] || '';
+        }
+
+        // Generate Persian Dates
+        function generatePersianDates() {
+            const today = new persianDate();
+            const issueDate = today.format('YYYY/MM/DD');
+            const expiryDate = today.add('year', 3).format('YYYY/MM/DD');
+            return { issueDate, expiryDate };
+        }
+
+        // Save Member to IndexedDB
+        function saveMember(member) {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            store.put(member);
+        }
+
+        // Get Member from IndexedDB
+        function getMember(nationalCode, callback) {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.get(nationalCode);
+            request.onsuccess = () => callback(request.result);
+            request.onerror = () => callback(null);
+        }
+
+        // Register Function
+        function register() {
+            // Validate all fields
+            const validations = [
+                validateName(),
+                validateFamily(),
+                validateNationalCode(),
+                validateRequiredField('birthdate', 'birthdateError', 'تاریخ تولد الزامی است'),
+                validatePhone(),
+                validateRequiredField('education', 'educationError', 'تحصیلات الزامی است'),
+                validateRequiredField('address', 'addressError', 'آدرس الزامی است'),
+                validateRequiredField('experience', 'experienceError', 'سابقه فعالیت الزامی است')
+            ];
+
+            if (!validations.every(v => v)) {
+                document.getElementById('signupError').textContent = '⚠️ لطفاً تمام فیلدهای الزامی را کامل کنید';
+                return;
+            }
+
+            // Check gender selection
+            const gender = document.querySelector('input[name="gender"]:checked');
+            if (!gender) {
+                document.getElementById('genderError').textContent = '❌ جنسیت را انتخاب کنید';
+                return;
+            }
+
+            // Check interests selection
+            const interests = getSelectedInterests();
+            if (interests.length === 0) {
+                document.getElementById('interestsError').textContent = '❌ حداقل یک حوزه فعالیت انتخاب کنید';
+                return;
+            }
+
+            // Check image upload
+            const imageData = document.getElementById('profilePreview').src;
+            if (imageData === '#' || !imageData.startsWith('data:image')) {
+                document.getElementById('signupError').textContent = '⚠️ آپلود عکس پرسنلی الزامی است';
+                return;
+            }
+
+            // Create member object
+            const member = {
+                name: document.getElementById('name').value.trim(),
+                family: document.getElementById('family').value.trim(),
+                nationalCode: document.getElementById('nationalCode').value.trim(),
+                birthdate: document.getElementById('birthdate').value,
+                phone: document.getElementById('phone').value.trim(),
+                gender: gender.value,
+                education: document.getElementById('education').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                experience: document.getElementById('experience').value.trim(),
+                interests: interests,
+                imageData: imageData,
+                ...generatePersianDates()
+            };
+
+            // Check if user already exists
+            getMember(member.nationalCode, (existing) => {
+                if (existing) {
+                    document.getElementById('signupError').textContent = '⚠️ این کد ملی قبلاً ثبت‌نام شده است';
+                } else {
+                    saveMember(member);
+                    document.getElementById('signupSuccess').textContent = '✅ ثبت‌نام با موفقیت انجام شد! در حال انتقال به صفحه ورود...';
+                    setTimeout(() => showLogin(), 2000);
                 }
-                return best;
+            });
+        }
+
+        // Login Function
+        function login() {
+            const nationalCode = document.getElementById('loginNationalCode').value.trim();
+            const error = document.getElementById('loginError');
+            
+            if (!/^\d{10}$/.test(nationalCode)) {
+                error.textContent = '❌ کد ملی معتبر نیست';
+                return;
+            }
+
+            getMember(nationalCode, (member) => {
+                if (member) {
+                    currentUser = member;
+                    showDashboard();
+                    generateIDCard();
+                } else {
+                    error.textContent = '❌ کاربری با این کد ملی یافت نشد';
+                }
+            });
+        }
+
+        // Navigation Functions
+        function showSignup() {
+            document.getElementById('signup').style.display = 'block';
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            // Clear error messages
+            document.querySelectorAll('.error').forEach(e => e.textContent = '');
+        }
+
+        function showLogin() {
+            document.getElementById('signup').style.display = 'none';
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('loginNationalCode').value = '';
+        }
+
+        function showDashboard() {
+            document.getElementById('signup').style.display = 'none';
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+
+        // Generate Professional ID Card
+        function generateIDCard() {
+            if (!currentUser) return;
+
+            document.getElementById('cardName').textContent = `${currentUser.name} ${currentUser.family}`;
+            document.getElementById('cardNationalCode').textContent = currentUser.nationalCode;
+            document.getElementById('cardIssueDate').textContent = currentUser.issueDate;
+            document.getElementById('cardExpiryDate').textContent = currentUser.expiryDate;
+            
+            const interestsText = currentUser.interests.map(i => getInterestText(i)).join('، ');
+            document.getElementById('cardInterests').textContent = interestsText || 'ثبت نشده';
+            
+            document.getElementById('cardPhoto').src = currentUser.imageData;
+
+            // Generate QR Code
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: `https://nature-khn.ir/verify?code=${currentUser.nationalCode}`,
+                width: 85,
+                height: 85,
+                colorDark: "#1b4332",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // Download ID Card as High-Resolution PNG
+        function downloadIDCard() {
+            if (!currentUser) return;
+            
+            const card = document.getElementById('membershipCard');
+            const button = event.target;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال آماده‌سازی...';
+            button.disabled = true;
+
+            html2canvas(card, {
+                scale: 3,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `کارت-عضویت-${currentUser.nationalCode}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+                
+                button.innerHTML = '<i class="fas fa-download"></i> دانلود کارت (PNG)';
+                button.disabled = false;
+            }).catch(err => {
+                console.error('خطا در دانلود:', err);
+                alert('خطا در دانلود کارت. لطفاً دوباره تلاش کنید.');
+                button.innerHTML = '<i class="fas fa-download"></i> دانلود کارت (PNG)';
+                button.disabled = false;
+            });
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+                currentUser = null;
+                showLogin();
             }
         }
 
-        function evaluate(board) {
-            for (const [a, b, c] of winningCombos) {
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    return board[a] === "O" ? 1 : -1;
-                }
-            }
-            if (!board.includes("")) return 0;
-            return null;
-        }
-
-        function getBoard() {
-            return cells.map(c => c.textContent || "");
-        }
-
-        function checkWinner() {
-            for (const [a, b, c] of winningCombos) {
-                if (
-                    cells[a].textContent &&
-                    cells[a].textContent === cells[b].textContent &&
-                    cells[a].textContent === cells[c].textContent
-                ) {
-                    statusText.textContent = `بازیکن ${cells[a].textContent} برنده شد!`;
-                    gameOver = true;
-                    restartBtn.style.display = "inline-block";
-                    return true;
-                }
-            }
-            if (cells.every(c => c.textContent !== "")) {
-                statusText.textContent = "بازی مساوی شد!";
-                gameOver = true;
-                restartBtn.style.display = "inline-block";
-                return true;
-            }
-            return false;
-        }
+        // Initialize on page load
+        window.onload = function() {
+            initDB();
+            
+            // Add form animation on focus
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        };
     </script>
 </body>
 </html>
