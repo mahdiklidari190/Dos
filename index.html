@@ -1,543 +1,1522 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>عضویت رسمی | انجمن دوستداران طبیعت خراسان شمالی</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انجمن دوستداران طبیعت خراسان شمالی | عضویت رسمی</title>
+    
+    <!-- Vazirmatn Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Persian Datepicker -->
+    <link href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css" rel="stylesheet">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        /* Modern CSS Variables */
+        :root {
+            --primary-900: #051f14;
+            --primary-800: #0b3b25;
+            --primary-700: #1b4332;
+            --primary-600: #2d6a4f;
+            --primary-500: #40916c;
+            --primary-400: #52b788;
+            --primary-300: #74c69d;
+            --accent-gold: #ffd166;
+            
+            --bg-gradient: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 40%, var(--primary-600) 100%);
+            
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            
+            --text-white: rgba(255, 255, 255, 0.92);
+            --text-white-muted: rgba(255, 255, 255, 0.7);
+            
+            --error-color: #ff6b6b;
+            --success-color: #52b788;
+            
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition-fast: all 0.2s ease;
+        }
 
-  <!-- Vazirmatn Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <!-- Font Awesome 6 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-white);
+            min-height: 100vh;
+            direction: rtl;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-  <!-- Persian Datepicker -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+        /* Professional Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 30px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--glass-shadow);
+        }
 
-  <!-- QR Code & Canvas -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-  <style>
-    :root {
-      --primary: #1b4332;
-      --primary-dark: #081c15;
-      --primary-light: #2d6a4f;
-      --accent: #40916c;
-      --light: #f8fffa;
-      --text: #e9f5f0;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: linear-gradient(135deg, #081c15 0%, #1b4332 50%, #2d6a4f 100%);
-      background-attachment: fixed;
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .container {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(27, 67, 50, 0.25);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .header img {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      border: 5px solid var(--accent);
-      object-fit: cover;
-    }
-    .header h1 {
-      font-size: 26px;
-      margin: 15px 0 8px;
-      color: white;
-    }
-    .header p {
-      color: #a8dadc;
-      font-size: 15px;
-    }
-    .form-group {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #d8f3dc;
-    }
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 14px 45px 14px 14px;
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 16px;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(64, 145, 108, 0.3);
-    }
-    .form-group i {
-      position: absolute;
-      left: 14px;
-      top: 48px;
-      color: #a8dadc;
-    }
-    .gender-group {
-      display: flex;
-      gap: 25px;
-      justify-content: center;
-    }
-    .interest-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .chip {
-      padding: 10px 16px;
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.2);
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .chip.selected {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
-    .btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.4s;
-      margin-top: 15px;
-    }
-    .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(64,145,108,0.4);
-    }
-    .link { color: #95d5b2; text-decoration: none; font-weight: 500; }
-    .link:hover { text-decoration: underline; }
-    .error { color: #ff6b6b; font-size: 14px; margin-top: 5px; }
-    .success { color: #95d5b2; font-weight: bold; margin: 15px 0; text-align: center; }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-400);
+            object-fit: cover;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+            transition: var(--transition);
+        }
 
-    /* ID Card */
-    #idCard {
-      width: 380px;
-      height: 600px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      position: relative;
-      color: #111;
-      font-size: 14px;
-    }
-    .card-header-strip {
-      background: linear-gradient(to right, var(--primary-dark), var(--primary), var(--accent));
-      padding: 15px;
-      text-align: center;
-      color: white;
-      position: relative;
-    }
-    .card-header-strip img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      position: absolute;
-      left: 15px;
-      top: 10px;
-      border: 3px solid white;
-    }
-    .card-header-strip h3 { font-size: 20px; margin: 0; }
-    .card-watermark {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url('https://images.unsplash.com/photo-1502086223501-09b7e5f7dd16?w=800&q=10') center/cover;
-      opacity: 0.07;
-      pointer-events: none;
-    }
-    .card-photo {
-      width: 130px;
-      height: 150px;
-      margin: 20px auto;
-      border: 5px solid var(--primary);
-      border-radius: 12px;
-      overflow: hidden;
-      background: #eee;
-    }
-    .card-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .card-info { padding: 0 25px; line-height: 2.1; }
-    .card-info strong { color: var(--primary); }
-    #qrCode { margin: 20px auto; text-align: center; }
-    .signature {
-      text-align: center;
-      margin: 25px 0;
-    }
-    .signature-line {
-      width: 160px;
-      height: 2px;
-      background: var(--primary);
-      margin: 10px auto;
-    }
-    .card-footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--primary-dark);
-      color: white;
-      text-align: center;
-      padding: 12px;
-      font-size: 12px;
-    }
-    @media (max-width: 480px) {
-      .container { padding: 20px; }
-      #idCard { width: 340px; height: 540px; }
-    }
-  </style>
+        .logo:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .header-text h1 {
+            font-weight: 900;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: -0.5px;
+        }
+
+        .header-text p {
+            font-weight: 300;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Loading Screen - Enhanced */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-400);
+            animation: pulse-glow 2s infinite alternate, rotate 10s linear infinite;
+            box-shadow: 0 0 40px rgba(82, 183, 136, 0.6);
+            margin-bottom: 30px;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 40px rgba(82, 183, 136, 0.6); }
+            to { box-shadow: 0 0 60px rgba(82, 183, 136, 0.9); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .loader-subtext {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .loader-progress {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-400), var(--accent-gold));
+            width: 0%;
+            animation: loadingProgress 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            border-radius: 10px;
+        }
+
+        @keyframes loadingProgress {
+            to { width: 100%; }
+        }
+
+        .loader-percentage {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 540px;
+            margin: 50px auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: var(--glass-shadow);
+            animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .section-title {
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to left, transparent, var(--primary-400), transparent);
+            border-radius: 3px;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-white);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 18px;
+            color: var(--primary-300);
+            font-size: 1.2rem;
+            pointer-events: none;
+            transition: var(--transition-fast);
+            z-index: 2;
+        }
+
+        .input-wrapper:focus-within .input-icon {
+            color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 18px 50px 18px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: var(--text-white);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-white-muted);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.25);
+        }
+
+        /* Gender Selection */
+        .gender-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .radio-card {
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .radio-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .radio-card.selected {
+            background: var(--primary-400);
+            border-color: var(--primary-400);
+            color: var(--primary-900);
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(82, 183, 136, 0.4);
+        }
+
+        .radio-card input[type="radio"] {
+            width: auto;
+            margin: 0;
+            accent-color: var(--accent-gold);
+            position: absolute;
+            opacity: 0;
+        }
+
+        /* Interest Chips with Icons */
+        .chips-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .chip:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .chip.selected {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--primary-900);
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(255, 209, 102, 0.3);
+        }
+
+        .chip i {
+            font-size: 1.1rem;
+            transition: var(--transition-fast);
+        }
+
+        .chip.selected i {
+            transform: scale(1.2);
+        }
+
+        /* File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed var(--glass-border);
+            border-radius: 16px;
+            color: var(--text-white-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .file-upload-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary-400);
+            color: var(--text-white);
+        }
+
+        .file-upload-button i {
+            font-size: 1.3rem;
+            margin-left: 8px;
+        }
+
+        #profileImage {
+            position: absolute;
+            left: -9999px;
+        }
+
+        #profilePreview {
+            display: none;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid var(--primary-400);
+            margin: 20px auto 0;
+            object-fit: cover;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 12px 40px rgba(82, 183, 136, 0.4); }
+        }
+
+        /* Messages */
+        .error {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            min-height: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .success {
+            color: var(--success-color);
+            font-weight: 700;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-400);
+            color: var(--primary-900);
+            border: none;
+            border-radius: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(82, 183, 136, 0.5);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Links */
+        a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        a:hover {
+            color: white;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* Membership Card - Premium Design */
+        .card-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            perspective: 1000px;
+        }
+
+        .membership-card {
+            width: 420px;
+            height: 660px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+            color: #212529;
+            direction: rtl;
+            text-align: right;
+            transform: rotateY(0) scale(0.95);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .membership-card:hover {
+            transform: rotateY(-2deg) scale(1);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 100%);
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }
+            to { box-shadow: 0 8px 40px rgba(82, 183, 136, 0.6); }
+        }
+
+        .card-title {
+            color: white;
+            font-weight: 900;
+            font-size: 1.3rem;
+            margin: 0;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-body {
+            padding: 35px;
+            position: relative;
+            height: calc(100% - 180px);
+            display: flex;
+            flex-direction: column;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(82, 183, 136, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(64, 145, 108, 0.03) 0%, transparent 50%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><path d="M30,30 Q75,15 120,30 Q135,75 120,120 Q75,135 30,120 Q15,75 30,30Z" fill="%231b4332" opacity="0.02"/></svg>') center no-repeat;
+            background-size: 150px;
+        }
+
+        .photo-frame {
+            width: 150px;
+            height: 150px;
+            border: 6px solid var(--primary-400);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            padding: 6px;
+            background: white;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-700), var(--primary-400));
+            z-index: -1;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .card-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card-field {
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .field-label {
+            font-weight: 800;
+            color: var(--primary-700);
+            font-size: 0.9rem;
+        }
+
+        .field-value {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.92rem;
+            text-align: left;
+            max-width: 60%;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            border: 2px dashed var(--primary-400);
+            position: relative;
+        }
+
+        .qr-section::before {
+            content: '⬇ اسکن کنید';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: white;
+            padding: 0 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary-700);
+        }
+
+        #qrcode {
+            margin: 0 auto;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .signature-section {
+            margin-top: auto;
+            text-align: left;
+            padding-top: 25px;
+        }
+
+        .signature-line {
+            width: 180px;
+            height: 2px;
+            background: linear-gradient(to left, transparent, var(--primary-600), transparent);
+            margin-bottom: 8px;
+        }
+
+        .signature-text {
+            font-size: 0.8rem;
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+
+        .card-footer {
+            background: var(--primary-700);
+            padding: 15px;
+            text-align: center;
+            border-top: 3px solid var(--primary-400);
+        }
+
+        .card-footer p {
+            color: white;
+            font-size: 0.85rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 18px 25px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--glass-shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 580px) {
+            .container {
+                margin: 20px 10px;
+                padding: 25px;
+            }
+
+            .header-text h1 {
+                font-size: 1.6rem;
+            }
+
+            .membership-card {
+                width: 100%;
+                max-width: 380px;
+                height: auto;
+                aspect-ratio: 420/660;
+            }
+
+            .chips-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .loader-progress {
+                width: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <img src="https://via.placeholder.com/150/1b4332/ffffff?text=لوگو" alt="لوگوی انجمن"/>
-    <h1>انجمن دوستداران طبیعت خراسان شمالی</h1>
-    <p>عضویت رسمی و صدور کارت شناسایی دیجیتال</p>
-  </div>
-
-  <!-- Signup -->
-  <div id="signup">
-    <h2 style="text-align:center;color:white;margin-bottom:20px;">فرم ثبت‌نام</h2>
-
-    <div class="form-group">
-      <label>نام</label>
-      <i class="fas fa-user"></i>
-      <input type="text" id="name" placeholder="نام خود را وارد کنید"/>
-      <div class="error" id="nameError"></div>
+    <!-- Loading Screen - 2 Seconds -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-content">
+            <img src="logo.png" alt="Logo" class="loader-logo">
+            <div class="loader-text">انجمن دوستداران طبیعت خراسان شمالی</div>
+            <div class="loader-subtext">در حال بارگذاری پنل عضویت...</div>
+            <div class="loader-progress">
+                <div class="loader-progress-bar"></div>
+                <div class="loader-percentage" id="loaderPercentage">0%</div>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label>نام خانوادگی</label>
-      <i class="fas fa-user"></i>
-      <input type="text" id="family" placeholder="نام خانوادگی"/>
-      <div class="error" id="familyError"></div>
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Professional Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="logo.png" alt="لوگوی انجمن دوستداران طبیعت خراسان شمالی" class="logo">
+            <div class="header-text">
+                <h1>انجمن دوستداران طبیعت خراسان شمالی</h1>
+                <p>عضویت رسمی و صدور کارت شناسایی دیجیتال</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sign Up Section -->
+        <div id="signup">
+            <h2 class="section-title">ثبت‌نام در انجمن</h2>
+            
+            <div class="input-group">
+                <label for="name">نام</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="name" placeholder="مثال: علی" autocomplete="off" required>
+                </div>
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="family">نام خانوادگی</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-tag input-icon"></i>
+                    <input type="text" id="family" placeholder="مثال: احمدی" autocomplete="off" required>
+                </div>
+                <div class="error" id="familyError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="nationalCode">کد ملی (کد عضویت)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-id-card input-icon"></i>
+                    <input type="text" id="nationalCode" placeholder="۱۰ رقم بدون خط تیره" maxlength="10" autocomplete="off" required>
+                </div>
+                <div class="error" id="nationalCodeError"></div>
+            </div>
+
+            <!-- Modern Date Picker -->
+            <div class="input-group">
+                <label for="birthdate">تاریخ تولد (هجری شمسی)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar-alt input-icon"></i>
+                    <input type="text" id="birthdate" placeholder="برای انتخاب تاریخ کلیک کنید" required>
+                </div>
+                <div class="error" id="birthdateError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">شماره تماس همراه</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" maxlength="11" autocomplete="off" required>
+                </div>
+                <div class="error" id="phoneError"></div>
+            </div>
+
+            <div class="input-group">
+                <label>جنسیت</label>
+                <div class="gender-container">
+                    <div class="radio-card" onclick="selectRadio('male')">
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <i class="fas fa-mars"></i>
+                        <label for="male">مرد</label>
+                    </div>
+                    <div class="radio-card" onclick="selectRadio('female')">
+                        <input type="radio" id="female" name="gender" value="female" required>
+                        <i class="fas fa-venus"></i>
+                        <label for="female">زن</label>
+                    </div>
+                </div>
+                <div class="error" id="genderError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="education">تحصیلات</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-graduation-cap input-icon"></i>
+                    <input type="text" id="education" placeholder="مثال: کارشناسی محیط زیست" required>
+                </div>
+                <div class="error" id="educationError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="address">آدرس محل زندگی</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <textarea id="address" rows="3" placeholder="نشانی کامل با کد پستی" required></textarea>
+                </div>
+                <div class="error" id="addressError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="experience">سابقه فعالیت محیط زیستی (سال)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-history input-icon"></i>
+                    <input type="number" id="experience" placeholder="۰" min="0" required>
+                </div>
+                <div class="error" id="experienceError"></div>
+            </div>
+
+            <div class="input-group">
+                <label>علاقه‌مندی به فعالیت در کدام بخش‌ها؟</label>
+                <div class="chips-wrapper">
+                    <div class="chip" data-value="1" onclick="toggleChip(this)">
+                        <i class="fas fa-mountain"></i> محیط زیست طبیعی
+                    </div>
+                    <div class="chip" data-value="2" onclick="toggleChip(this)">
+                        <i class="fas fa-city"></i> محیط زیست انسانی
+                    </div>
+                    <div class="chip" data-value="3" onclick="toggleChip(this)">
+                        <i class="fas fa-tree"></i> منابع طبیعی
+                    </div>
+                    <div class="chip" data-value="4" onclick="toggleChip(this)">
+                        <i class="fas fa-chalkboard-teacher"></i> آموزش و توانمندسازی
+                    </div>
+                    <div class="chip" data-value="5" onclick="toggleChip(this)">
+                        <i class="fas fa-pen-fancy"></i> تولید محتوا
+                    </div>
+                    <div class="chip" data-value="6" onclick="toggleChip(this)">
+                        <i class="fas fa-palette"></i> هنر و محیط زیست
+                    </div>
+                    <div class="chip" data-value="7" onclick="toggleChip(this)">
+                        <i class="fas fa-running"></i> ورزش و محیط زیست
+                    </div>
+                    <div class="chip" data-value="8" onclick="toggleChip(this)">
+                        <i class="fas fa-users"></i> جوانان و محیط زیست
+                    </div>
+                    <div class="chip" data-value="9" onclick="toggleChip(this)">
+                        <i class="fas fa-child"></i> کودکان و نوجوانان
+                    </div>
+                    <div class="chip" data-value="10" onclick="toggleChip(this)">
+                        <i class="fas fa-robot"></i> هوش مصنوعی
+                    </div>
+                    <div class="chip" data-value="11" onclick="toggleChip(this)">
+                        <i class="fas fa-wifi"></i> فضای مجازی
+                    </div>
+                    <div class="chip" data-value="12" onclick="toggleChip(this)">
+                        <i class="fas fa-water"></i> تالاب‌ها
+                    </div>
+                </div>
+                <div class="error" id="interestsError"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="profileImage">عکس پرسنلی (اجباری)</label>
+                <div class="file-upload-wrapper">
+                    <label for="profileImage" class="file-upload-button">
+                        <i class="fas fa-cloud-upload-alt"></i> انتخاب تصویر
+                    </label>
+                    <input type="file" id="profileImage" accept="image/*" required>
+                </div>
+                <img id="profilePreview" alt="پیش‌نمایش عکس">
+            </div>
+
+            <div class="success" id="signupSuccess"></div>
+            <div class="error" id="signupError"></div>
+
+            <button onclick="register()" id="registerBtn">
+                <i class="fas fa-user-plus"></i> تکمیل ثبت‌نام
+            </button>
+            
+            <p style="text-align: center; margin-top: 25px; font-weight: 600;">
+                قبلاً ثبت‌نام کرده‌اید؟ <a href="#" onclick="showLogin()">ورود به پنل کاربری</a>
+            </p>
+        </div>
+
+        <!-- Login Section -->
+        <div id="login" style="display: none;">
+            <h2 class="section-title">ورود به پنل کاربری</h2>
+            
+            <div class="input-group">
+                <label for="loginNationalCode">کد ملی (کد عضویت)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-key input-icon"></i>
+                    <input type="text" id="loginNationalCode" placeholder="۱۰ رقم" maxlength="10" autocomplete="off" required>
+                </div>
+                <div class="error" id="loginError"></div>
+            </div>
+
+            <button onclick="login()" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> ورود
+            </button>
+            
+            <p style="text-align: center; margin-top: 25px; font-weight: 600;">
+                هنوز عضو نشده‌اید؟ <a href="#" onclick="showSignup()">ثبت‌نام جدید</a>
+            </p>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" style="display: none;">
+            <h2 class="section-title">کارت عضویت دیجیتال شما</h2>
+            
+            <div class="card-wrapper">
+                <div id="membershipCard" class="membership-card">
+                    <div class="card-header">
+                        <img src="logo.png" alt="لوگوی انجمن" class="card-logo">
+                        <h3 class="card-title">کارت عضویت رسمی</h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="photo-frame">
+                            <img id="cardPhoto" src="" alt="عکس عضو" class="card-photo">
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">نام و نام خانوادگی:</span>
+                            <span class="field-value" id="cardName"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">کد عضویت:</span>
+                            <span class="field-value" id="cardNationalCode"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">تاریخ صدور:</span>
+                            <span class="field-value" id="cardIssueDate"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">تاریخ انقضا:</span>
+                            <span class="field-value" id="cardExpiryDate"></span>
+                        </div>
+
+                        <div class="card-field">
+                            <span class="field-label">حوزه فعالیت:</span>
+                            <span class="field-value" id="cardInterests"></span>
+                        </div>
+
+                        <div class="qr-section">
+                            <div id="qrcode"></div>
+                        </div>
+
+                        <div class="signature-section">
+                            <div class="signature-line"></div>
+                            <div class="signature-text">امضای رئیس انجمن</div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <p>انجمن دوستداران طبیعت خراسان شمالی | اعتبار ۳ ساله</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+                <button onclick="downloadIDCard()" id="downloadBtn">
+                    <i class="fas fa-download"></i> دانلود (PNG)
+                </button>
+                <button onclick="logout()" style="background: var(--error-color);">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label>کد ملی</label>
-      <i class="fas fa-id-card"></i>
-      <input type="text" id="nationalCode" maxlength="10" placeholder="کد ملی ۱۰ رقمی"/>
-      <div class="error" id="nationalCodeError"></div>
-    </div>
+    <!-- Scripts -->
+    <script>
+        // Global Variables
+        let db;
+        const dbName = "NatureLoversDB_v3";
+        const storeName = "Members";
+        let currentUser = null;
 
-    <div class="form-group">
-      <label>تاریخ تولد (شمسی)</label>
-      <i class="fas fa-calendar-alt"></i>
-      <input type="text" id="birthdate" class="persian-datepicker" placeholder="تاریخ تولد را انتخاب کنید"/>
-      <div class="error" id="birthdateError"></div>
-    </div>
+        // Initialize IndexedDB
+        function initDB() {
+            const request = indexedDB.open(dbName, 1);
+            request.onupgradeneeded = (e) => {
+                db = e.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName, { keyPath: "nationalCode" });
+                }
+            };
+            request.onsuccess = (e) => { db = e.target.result; };
+            request.onerror = (e) => { console.error("خطا در DB:", e.target.error); };
+        }
 
-    <div class="form-group">
-      <label>شماره همراه</label>
-      <i class="fas fa-phone"></i>
-      <input type="text" id="phone" maxlength="11" placeholder="۰۹xxxxxxxxx"/>
-      <div class="error" id="phoneError"></div>
-    </div>
+        // Initialize Persian Datepicker
+        document.addEventListener('DOMContentLoaded', function() {
+            $("#birthdate").pDatepicker({
+                format: "YYYY/MM/DD",
+                autoClose: true,
+                calendarType: 'jalali',
+                observer: true,
+                initialValue: false,
+                onSelect: function(unixDate) {
+                    if (unixDate) {
+                        const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
+                        document.getElementById('birthdate').value = selectedDate;
+                        document.getElementById('birthdateError').textContent = '✓';
+                        document.getElementById('birthdateError').style.color = 'var(--success-color)';
+                    }
+                }
+            });
+        });
 
-    <div class="form-group">
-      <label>جنسیت</label>
-      <div class="gender-group">
-        <label><input type="radio" name="gender" value="male"> مرد</label>
-        <label><input type="radio" name="gender" value="female"> زن</label>
-      </div>
-      <div class="error" id="genderError"></div>
-    </div>
+        // Loading Screen - 2 Seconds Timer
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const percentage = document.getElementById('loaderPercentage');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += 5;
+                percentage.textContent = `${Math.min(progress, 100)}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                        }, 800);
+                    }, 200);
+                }
+            }, 100);
+        });
 
-    <div class="form-group">
-      <label>تحصیلات</label>
-      <i class="fas fa-graduation-cap"></i>
-      <input type="text" id="education" placeholder="تحصیلات"/>
-    </div>
+        // Toast Notification
+        function showToast(message, type = 'info', duration = 4000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
 
-    <div class="form-group">
-      <label>آدرس محل سکونت</label>
-      <i class="fas fa-home"></i>
-      <textarea id="address" rows="3" placeholder="آدرس کامل"></textarea>
-    </div>
+        // Radio Selection
+        function selectRadio(value) {
+            document.getElementById(value).checked = true;
+            document.querySelectorAll('.radio-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`#${value}`).closest('.radio-card').classList.add('selected');
+            document.getElementById('genderError').textContent = '';
+        }
 
-    <div class="form-group">
-      <label>عکس پرسنلی</label>
-      <input type="file" id="profileImage" accept="image/*" style="color:white;"/>
-      <img id="profilePreview" src="" alt="پیش‌نمایش" style="display:none;width:100px;height:100px;border-radius:50%;margin-top:10px;"/>
-    </div>
+        // Chip Selection
+        function toggleChip(chip) {
+            chip.classList.toggle('selected');
+            document.getElementById('interestsError').textContent = '';
+        }
 
-    <div class="form-group">
-      <label>سابقه فعالیت محیط‌زیستی (سال)</label>
-      <input type="number" id="experience" min="0" placeholder="چند سال؟ (در صورت نداشتن ۰ وارد کنید)"/>
-    </div>
+        // Image Upload
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('حجم تصویر نباید بیشتر از ۲ مگابایت باشد', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('profilePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
 
-    <div class="form-group">
-      <label>علاقه‌مندی به فعالیت در کدام بخش؟ (حداقل یکی)</label>
-      <div class="interest-chips">
-        <div class="chip" data-val="محیط زیست طبیعی">محیط زیست طبیعی</div>
-        <div class="chip" data-val="محیط زیست انسانی">محیط زیست انسانی</div>
-        <div class="chip" data-val="منابع طبیعی">منابع طبیعی</div>
-        <div class="chip" data-val="آموزش جوامع محلی">آموزش جوامع محلی</div>
-        <div class="chip" data-val="تولید محتوا">تولید محتوا</div>
-        <div class="chip" data-val="هنر و محیط زیست">هنر و محیط زیست</div>
-        <div class="chip" data-val="ورزش و محیط زیست">ورزش و محیط زیست</div>
-        <div class="chip" data-val="جوانان">جوانان</div>
-        <div class="chip" data-val="کودکان">کودکان</div>
-        <div class="chip" data-val="هوش مصنوعی">هوش مصنوعی</div>
-      </div>
-      <div class="error" id="interestsError"></div>
-    </div>
+        // Validation Functions
+        const validators = {
+            name: () => {
+                const name = document.getElementById('name').value.trim();
+                const error = document.getElementById('nameError');
+                if (!name) return showError(error, 'نام الزامی است');
+                if (!/^[\u0600-\u06FF\s]{2,20}$/.test(name)) return showError(error, 'نام باید 2-20 حرف فارسی باشد');
+                return showSuccess(error);
+            },
+            family: () => {
+                const family = document.getElementById('family').value.trim();
+                const error = document.getElementById('familyError');
+                if (!family) return showError(error, 'نام خانوادگی الزامی است');
+                if (!/^[\u0600-\u06FF\s]{2,30}$/.test(family)) return showError(error, 'نام خانوادگی باید 2-30 حرف فارسی باشد');
+                return showSuccess(error);
+            },
+            nationalCode: () => {
+                const code = document.getElementById('nationalCode').value.trim();
+                const error = document.getElementById('nationalCodeError');
+                if (!code) return showError(error, 'کد ملی الزامی است');
+                if (!/^\d{10}$/.test(code)) return showError(error, 'کد ملی باید دقیقاً ۱۰ رقم باشد');
+                
+                const weights = [10,9,8,7,6,5,4,3,2];
+                let sum = 0;
+                for(let i=0; i<9; i++) sum += parseInt(code[i]) * weights[i];
+                const check = (sum % 11) < 2 ? (sum % 11) : (11 - (sum % 11));
+                if (parseInt(code[9]) !== check) return showError(error, 'کد ملی معتبر نیست');
+                return showSuccess(error);
+            },
+            birthdate: () => {
+                const date = document.getElementById('birthdate').value;
+                const error = document.getElementById('birthdateError');
+                if (!date) return showError(error, 'تاریخ تولد الزامی است');
+                return showSuccess(error);
+            },
+            phone: () => {
+                const phone = document.getElementById('phone').value.trim();
+                const error = document.getElementById('phoneError');
+                if (!phone) return showError(error, 'شماره تماس الزامی است');
+                if (!/^09\d{9}$/.test(phone)) return showError(error, 'شماره باید با ۰۹ شروع و ۱۱ رقم باشد');
+                return showSuccess(error);
+            },
+            gender: () => {
+                const gender = document.querySelector('input[name="gender"]:checked');
+                const error = document.getElementById('genderError');
+                if (!gender) return showError(error, 'جنسیت را انتخاب کنید');
+                error.textContent = '';
+                return true;
+            },
+            education: () => validateRequired('education', 'educationError', 'تحصیلات'),
+            address: () => validateRequired('address', 'addressError', 'آدرس'),
+            experience: () => validateRequired('experience', 'experienceError', 'سابقه فعالیت'),
+            interests: () => {
+                const interests = getSelectedInterests();
+                const error = document.getElementById('interestsError');
+                if (interests.length === 0) return showError(error, 'حداقل یک حوزه فعالیت انتخاب کنید');
+                error.textContent = '';
+                return true;
+            },
+            image: () => {
+                const imageData = document.getElementById('profilePreview').src;
+                const error = document.getElementById('signupError');
+                if (imageData === '#' || !imageData.startsWith('data:image')) {
+                    error.textContent = '⚠️ آپلود عکس پرسنلی الزامی است';
+                    return false;
+                }
+                return true;
+            }
+        };
 
-    <div class="success" id="signupSuccess"></div>
-    <div class="error" id="signupError"></div>
+        function showError(element, message) {
+            element.innerHTML = `<i class="fas fa-times-circle"></i> ${message}`;
+            return false;
+        }
 
-    <button class="btn" onclick="register()">ثبت‌نام در انجمن</button>
-    <p style="text-align:center;margin-top:15px;">
-      حساب دارید؟ <a href="#" class="link" onclick="showLogin()">ورود به پنل</a>
-    </p>
-  </div>
+        function showSuccess(element) {
+            element.innerHTML = '<i class="fas fa-check-circle"></i> ✓';
+            element.style.color = 'var(--success-color)';
+            return true;
+        }
 
-  <!-- Login -->
-  <div id="login" style="display:none;">
-    <h2 style="text-align:center;color:white;margin-bottom:30px;">ورود به پنل کاربری</h2>
-    <div class="form-group">
-      <label>کد ملی</label>
-      <i class="fas fa-id-card"></i>
-      <input type="text" id="loginNationalCode" placeholder="کد ملی خود را وارد کنید"/>
-    </div>
-    <div class="error" id="loginError"></div>
-    <button class="btn" onclick="login()">ورود</button>
-    <p style="text-align:center;margin-top:15px;">
-      حساب ندارید؟ <a href="#" class="link" onclick="showSignup()">ثبت‌نام</a>
-    </p>
-  </div>
+        function validateRequired(fieldId, errorId, fieldName) {
+            const value = document.getElementById(fieldId).value.trim();
+            const error = document.getElementById(errorId);
+            if (!value) return showError(error, `${fieldName} الزامی است`);
+            return showSuccess(error);
+        }
 
-  <!-- Dashboard -->
-  <div id="dashboard" style="display:none;">
-    <h2 style="text-align:center;color:white;margin-bottom:20px;">کارت عضویت شما</h2>
+        function getSelectedInterests() {
+            return Array.from(document.querySelectorAll('.chip.selected')).map(c => c.dataset.value);
+        }
 
-    <div id="idCard">
-      <div class="card-header-strip">
-        <img src="https://via.placeholder.com/150/1b4332/ffffff?text=لوگو" alt="لوگو"/>
-        <h3>کارت عضویت رسمی</h3>
-      </div>
-      <div class="card-watermark"></div>
+        function getInterestText(value) {
+            const map = {
+                '1': 'محیط زیست طبیعی', '2': 'محیط زیست انسانی', '3': 'منابع طبیعی',
+                '4': 'آموزش و توانمندسازی', '5': 'تولید محتوا', '6': 'هنر و محیط زیست',
+                '7': 'ورزش و محیط زیست', '8': 'جوانان و محیط زیست', '9': 'کودکان و نوجوانان',
+                '10': 'هوش مصنوعی', '11': 'فضای مجازی', '12': 'تالاب‌ها'
+            };
+            return map[value] || '';
+        }
 
-      <div class="card-photo">
-        <img id="cardPhoto" src="" alt="عکس"/>
-      </div>
+        function generateDates() {
+            const today = new persianDate();
+            return {
+                issueDate: today.format('YYYY/MM/DD'),
+                expiryDate: today.add('year', 3).format('YYYY/MM/DD')
+            };
+        }
 
-      <div class="card-info">
-        <p><strong>نام و نام خانوادگی:</strong> <span id="cardFullName"></span></p>
-        <p><strong>کد عضویت:</strong> <span id="cardNationalCode"></span></p>
-        <p><strong>تاریخ صدور:</strong> <span id="cardIssueDate"></span></p>
-        <p><strong>تاریخ انقضا:</strong> <span id="cardExpiryDate"></span></p>
-        <p><strong>واحد فعالیت:</strong> <span id="cardInterests"></span></p>
-      </div>
+        function saveMember(member, callback) {
+            const tx = db.transaction([storeName], 'readwrite');
+            const store = tx.objectStore(storeName);
+            store.put(member).onsuccess = callback;
+        }
 
-      <div id="qrCode"></div>
+        function getMember(nationalCode, callback) {
+            const tx = db.transaction([storeName], 'readonly');
+            const store = tx.objectStore(storeName);
+            store.get(nationalCode).onsuccess = (e) => callback(e.target.result);
+        }
 
-      <div class="signature">
-        <div class="signature-line"></div>
-        <p>امضای رئیس انجمن</p>
-      </div>
+        function register() {
+            const allValid = Object.keys(validators).every(key => validators[key]());
+            if (!allValid) {
+                showToast('لطفاً تمام فیلدهای الزامی را کامل کنید', 'error');
+                return;
+            }
 
-      <div class="card-footer">
-        انجمن دوستداران طبیعت خراسان شمالی و غرب خراسان رضوی<br/>
-        www.nature-khn.ir
-      </div>
-    </div>
+            const member = {
+                name: document.getElementById('name').value.trim(),
+                family: document.getElementById('family').value.trim(),
+                nationalCode: document.getElementById('nationalCode').value.trim(),
+                birthdate: document.getElementById('birthdate').value,
+                phone: document.getElementById('phone').value.trim(),
+                gender: document.querySelector('input[name="gender"]:checked').value,
+                education: document.getElementById('education').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                experience: document.getElementById('experience').value.trim(),
+                interests: getSelectedInterests(),
+                imageData: document.getElementById('profilePreview').src,
+                ...generateDates()
+            };
 
-    <button class="btn" onclick="downloadPNG()">دانلود کارت (PNG)</button>
-    <button class="btn" onclick="downloadPDF()" style="margin-top:10px;background:#2d6a4f;">دانلود کارت (PDF)</button>
-    <button class="btn" onclick="logout()" style="margin-top:20px;background:#c1121f;">خروج از حساب</button>
-  </div>
-</div>
+            const btn = document.getElementById('registerBtn');
+            btn.innerHTML = '<div class="spinner"></div> در حال ثبت...';
+            btn.disabled = true;
 
-<script>
-  const { jsPDF } = window.jspdf;
-  let currentUser = null;
+            getMember(member.nationalCode, (existing) => {
+                if (existing) {
+                    showToast('⚠️ این کد ملی قبلاً ثبت‌نام شده است', 'error');
+                } else {
+                    saveMember(member, () => {
+                        showToast('✅ ثبت‌نام با موفقیت انجام شد!', 'success');
+                        setTimeout(() => showLogin(), 2000);
+                    });
+                }
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
+                btn.disabled = false;
+            });
+        }
 
-  // IndexedDB
-  let db;
-  const request = indexedDB.open("NatureLoversDB", 1);
-  request.onupgradeneeded = e => e.target.result.createObjectStore("users", { keyPath: "nationalCode" });
-  request.onsuccess = e => db = e.target.result;
+        function login() {
+            const code = document.getElementById('loginNationalCode').value.trim();
+            if (!/^\d{10}$/.test(code)) {
+                showToast('کد ملی معتبر نیست', 'error');
+                return;
+            }
 
-  // Persian Datepicker
-  $(document).ready(function(){
-    $("#birthdate").persianDatepicker({
-      format: "YYYY/MM/DD",
-      autoClose: true,
-      initialValue: false,
-      calendar: { persian: { locale: "fa" } }
-    });
-  });
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<div class="spinner"></div> در حال ورود...';
+            btn.disabled = true;
 
-  // Preview photo
-  document.getElementById("profileImage").addEventListener("change", e => {
-    const file = e.target.files[0];
-    if(file){
-      const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById("profilePreview").src = ev.target.result;
-        document.getElementById("profilePreview").style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+            getMember(code, (member) => {
+                if (member) {
+                    currentUser = member;
+                    showDashboard();
+                    generateIDCard();
+                    showToast('✅ ورود موفقیت‌آمیز', 'success');
+                } else {
+                    showToast('کاربری یافت نشد', 'error');
+                }
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
+                btn.disabled = false;
+            });
+        }
 
-  // Interest chips
-  document.querySelectorAll(".chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      chip.classList.toggle("selected");
-    });
-  });
+        function showSignup() {
+            document.getElementById('signup').style.display = 'block';
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+        }
 
-  // Validation functions (same logic as before, slightly cleaned)
-  function validateForm(){
-    let valid = true;
-    if(!/^[آ-ی\s]+$/.test(document.getElementById("name").value.trim())) valid = false;
-    if(!/^[آ-ی\s]+$/.test(document.getElementById("family").value.trim())) valid = false;
-    if(!/^\d{10}$/.test(document.getElementById("nationalCode").value)) valid = false;
-    if(!document.getElementById("birthdate").value) valid = false;
-    if(!/^09\d{9}$/.test(document.getElementById("phone").value)) valid = false;
-    if(!document.querySelector('input[name="gender"]:checked')) valid = false;
-    if(document.querySelectorAll(".chip.selected").length === 0) valid = false;
-    return valid;
-  }
+        function showLogin() {
+            document.getElementById('signup').style.display = 'none';
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginNationalCode').value = '';
+        }
 
-  // Register
-  function register(){
-    if(!validateForm()){
-      document.getElementById("signupError").textContent = "لطفاً تمامی فیلدها را درست پر کنید.";
-      return;
-    }
-    const interests = Array.from(document.querySelectorAll(".chip.selected")).map(c=>c.dataset.val).join("، ");
-    const user = {
-      name: document.getElementById("name").value.trim(),
-      family: document.getElementById("family").value.trim(),
-      nationalCode: document.getElementById("nationalCode").value,
-      birthdate: document.getElementById("birthdate").value,
-      phone: document.getElementById("phone").value,
-      gender: document.querySelector('input[name="gender"]:checked').value === "male" ? "مرد" : "زن",
-      education: document.getElementById("education").value,
-      address: document.getElementById("address").value,
-      experience: document.getElementById("experience").value || "۰",
-      interests,
-      photo: document.getElementById("profilePreview").src || ""
-    };
+        function showDashboard() {
+            document.getElementById('signup').style.display = 'none';
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
 
-    const tx = db.transaction("users","readwrite");
-    tx.objectStore("users").put(user);
-    tx.oncomplete = () => {
-      document.getElementById("signupSuccess").textContent = "ثبت‌نام با موفقیت انجام شد! در حال انتقال به ورود...";
-      setTimeout(() => showLogin(), 2000);
-    };
-  }
+        function generateIDCard() {
+            if (!currentUser) return;
 
-  // Login
-  function login(){
-    const code = document.getElementById("loginNationalCode").value;
-    if(!code){ document.getElementById("loginError").textContent="کد ملی را وارد کنید"; return; }
-    const tx = db.transaction("users");
-    tx.objectStore("users").get(code).onsuccess = e => {
-      const user = e.target.result;
-      if(user){
-        currentUser = user;
-        showDashboard(user);
-      } else {
-        document.getElementById("loginError").textContent="کاربری با این کد ملی یافت نشد";
-      }
-    };
-  }
+            document.getElementById('cardName').textContent = `${currentUser.name} ${currentUser.family}`;
+            document.getElementById('cardNationalCode').textContent = currentUser.nationalCode;
+            document.getElementById('cardIssueDate').textContent = currentUser.issueDate;
+            document.getElementById('cardExpiryDate').textContent = currentUser.expiryDate;
+            
+            const interestsText = currentUser.interests.map(i => getInterestText(i)).join('، ');
+            document.getElementById('cardInterests').textContent = interestsText || 'ثبت نشده';
+            document.getElementById('cardPhoto').src = currentUser.imageData;
 
-  // Show Dashboard + Card
-  function showDashboard(user){
-    document.getElementById("signup").style.display="none";
-    document.getElementById("login").style.display="none";
-    document.getElementById("dashboard").style.display="block";
+            const qr = document.getElementById('qrcode');
+            qr.innerHTML = '';
+            new QRCode(qr, {
+                text: `https://nature-khn.ir/verify?code=${currentUser.nationalCode}`,
+                width: 90,
+                height: 90,
+                colorDark: "#1b4332",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
 
-    document.getElementById("cardFullName").textContent = `\( {user.name} \){user.family}`;
-    document.getElementById("cardNationalCode").textContent = user.nationalCode;
-    document.getElementById("cardInterests").textContent = user.interests;
-    document.getElementById("cardPhoto").src = user.photo || "https://via.placeholder.com/130x150/cccccc/666666?text=بدون+عکس";
+        function downloadIDCard() {
+            if (!currentUser) return;
+            
+            const btn = document.getElementById('downloadBtn');
+            btn.innerHTML = '<div class="spinner"></div> در حال آماده‌سازی...';
+            btn.disabled = true;
 
-    const today = new Date().toLocaleDateString("fa-IR");
-    const expiry = new Date();
-    expiry.setFullYear(expiry.getFullYear() + 3);
-    document.getElementById("cardIssueDate").textContent = today;
-    document.getElementById("cardExpiryDate").textContent = expiry.toLocaleDateString("fa-IR");
+            html2canvas(document.getElementById('membershipCard'), {
+                scale: 3,
+                backgroundColor: '#ffffff',
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `کارت-عضویت-${currentUser.nationalCode}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+                
+                btn.innerHTML = '<i class="fas fa-download"></i> دانلود (PNG)';
+                btn.disabled = false;
+                showToast('✅ کارت با موفقیت دانلود شد', 'success');
+            }).catch(err => {
+                console.error(err);
+                showToast('خطا در دانلود', 'error');
+                btn.innerHTML = '<i class="fas fa-download"></i> دانلود (PNG)';
+                btn.disabled = false;
+            });
+        }
 
-    QRCode.toCanvas(document.getElementById("qrCode"), `https://nature-khn.ir/verify?code=${user.nationalCode}`, { width: 110, color:{dark:"#1b4332"} });
-  }
+        function logout() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+                currentUser = null;
+                showLogin();
+                showToast('✅ خروج موفقیت‌آمیز', 'success');
+            }
+        }
 
-  // Download PNG
-  function downloadPNG(){
-    html2canvas(document.getElementById("idCard"), {scale: 2}).then(canvas => {
-      const link = document.createElement("a");
-      link.download = `کارت_عضویت_${currentUser.nationalCode}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-  }
-
-  // Download PDF
-  function downloadPDF(){
-    html2canvas(document.getElementById("idCard"), {scale: 2}).then(canvas => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", [100, 158]); // حدوداً نسبت کارت
-      pdf.addImage(imgData, "PNG", 0, 0, 100, 158);
-      pdf.save(`کارت_عضویت_${currentUser.nationalCode}.pdf`);
-    });
-  }
-
-  // Navigation
-  function showLogin(){ document.getElementById("signup").style.display="none"; document.getElementById("login").style.display="block"; }
-  function showSignup(){ document.getElementById("login").style.display="none"; document.getElementById("signup").style.display="block"; }
-  function logout(){
-    currentUser = null;
-    document.getElementById("dashboard").style.display="none";
-    document.getElementById("signup").style.display="block";
-  }
-</script>
+        // Initialize
+        window.onload = () => {
+            initDB();
+            
+            // Add focus animations
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.closest('.input-wrapper').style.transform = 'scale(1.02)';
+                });
+                input.addEventListener('blur', () => {
+                    input.closest('.input-wrapper').style.transform = 'scale(1)';
+                });
+            });
+        };
+    </script>
 </body>
-          </html>
+</html>
