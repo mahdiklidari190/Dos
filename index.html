@@ -1134,41 +1134,62 @@
         const dbName = "NatureLoversDB_v3";
         const storeName = "Members";
         let currentUser = null;
+        let dbReady = false;
 
         // Initialize IndexedDB
         function initDB() {
+            console.log("Initializing IndexedDB...");
             const request = indexedDB.open(dbName, 1);
+            
             request.onupgradeneeded = (e) => {
+                console.log("DB upgrade needed");
                 db = e.target.result;
                 if (!db.objectStoreNames.contains(storeName)) {
                     db.createObjectStore(storeName, { keyPath: "nationalCode" });
+                    console.log("Object store created");
                 }
             };
-            request.onsuccess = (e) => { db = e.target.result; };
-            request.onerror = (e) => { console.error("خطا در DB:", e.target.error); };
+            
+            request.onsuccess = (e) => {
+                console.log("DB initialized successfully");
+                db = e.target.result;
+                dbReady = true;
+            };
+            
+            request.onerror = (e) => {
+                console.error("خطا در DB:", e.target.error);
+                showToast('خطا در راه‌اندازی پایگاه داده', 'error');
+            };
         }
 
         // Initialize Persian Datepicker
         document.addEventListener('DOMContentLoaded', function() {
-            $("#birthdate").pDatepicker({
-                format: "YYYY/MM/DD",
-                autoClose: true,
-                calendarType: 'jalali',
-                observer: true,
-                initialValue: false,
-                onSelect: function(unixDate) {
-                    if (unixDate) {
-                        const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
-                        document.getElementById('birthdate').value = selectedDate;
-                        document.getElementById('birthdateError').textContent = '✓';
-                        document.getElementById('birthdateError').style.color = 'var(--success-color)';
+            console.log("Initializing datepicker...");
+            try {
+                $("#birthdate").pDatepicker({
+                    format: "YYYY/MM/DD",
+                    autoClose: true,
+                    calendarType: 'jalali',
+                    observer: true,
+                    initialValue: false,
+                    onSelect: function(unixDate) {
+                        if (unixDate) {
+                            const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
+                            document.getElementById('birthdate').value = selectedDate;
+                            document.getElementById('birthdateError').textContent = '✓';
+                            document.getElementById('birthdateError').style.color = 'var(--success-color)';
+                        }
                     }
-                }
-            });
+                });
+                console.log("Datepicker initialized");
+            } catch (e) {
+                console.error("Datepicker error:", e);
+            }
         });
 
         // Loading Screen - 2 Seconds Timer
         window.addEventListener('load', function() {
+            console.log("Page loaded, starting loading screen...");
             const loadingScreen = document.getElementById('loadingScreen');
             const percentage = document.getElementById('loaderPercentage');
             let progress = 0;
@@ -1183,6 +1204,7 @@
                         loadingScreen.classList.add('hidden');
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
+                            console.log("Loading screen hidden");
                         }, 800);
                     }, 200);
                 }
@@ -1218,7 +1240,7 @@
             document.getElementById('interestsError').textContent = '';
         }
 
-        // Image Upload
+        // Image Upload with Error Handling
         document.getElementById('profileImage').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1233,6 +1255,10 @@
                 const preview = document.getElementById('profilePreview');
                 preview.src = e.target.result;
                 preview.style.display = 'block';
+                preview.style.margin = '20px auto 0';
+            };
+            reader.onerror = () => {
+                showToast('خطا در خواندن تصویر', 'error');
             };
             reader.readAsDataURL(file);
         });
@@ -1348,19 +1374,39 @@
         }
 
         function saveMember(member, callback) {
+            if (!dbReady) {
+                showToast('خطا: پایگاه داده آماده نیست', 'error');
+                return;
+            }
             const tx = db.transaction([storeName], 'readwrite');
             const store = tx.objectStore(storeName);
             store.put(member).onsuccess = callback;
         }
 
         function getMember(nationalCode, callback) {
+            if (!dbReady) {
+                showToast('خطا: پایگاه داده آماده نیست', 'error');
+                return;
+            }
             const tx = db.transaction([storeName], 'readonly');
             const store = tx.objectStore(storeName);
             store.get(nationalCode).onsuccess = (e) => callback(e.target.result);
         }
 
+        // FIXED: Register Function with proper error handling
         function register() {
-            const allValid = Object.keys(validators).every(key => validators[key]());
+            console.log("Register button clicked");
+            
+            if (!dbReady) {
+                showToast('لطفاً چند لحظه صبر کنید...', 'info');
+                return;
+            }
+
+            const allValid = Object.keys(validators).every(key => {
+                console.log(`Validating ${key}...`);
+                return validators[key]();
+            });
+            
             if (!allValid) {
                 showToast('لطفاً تمام فیلدهای الزامی را کامل کنید', 'error');
                 return;
@@ -1399,10 +1445,18 @@
             });
         }
 
+        // FIXED: Login Function with proper error handling
         function login() {
+            console.log("Login button clicked");
+            
+            if (!dbReady) {
+                showToast('لطفاً چند لحظه صبر کنید...', 'info');
+                return;
+            }
+
             const code = document.getElementById('loginNationalCode').value.trim();
             if (!/^\d{10}$/.test(code)) {
-                showToast('کد ملی معتبر نیست', 'error');
+                showToast('کد ملی معتبر نیست (باید ۱۰ رقم باشد)', 'error');
                 return;
             }
 
@@ -1417,7 +1471,7 @@
                     generateIDCard();
                     showToast('✅ ورود موفقیت‌آمیز', 'success');
                 } else {
-                    showToast('کاربری یافت نشد', 'error');
+                    showToast('کاربری با این کد ملی یافت نشد', 'error');
                 }
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
                 btn.disabled = false;
@@ -1505,6 +1559,7 @@
 
         // Initialize
         window.onload = () => {
+            console.log("Window loaded, initializing...");
             initDB();
             
             // Add focus animations
@@ -1516,6 +1571,11 @@
                     input.closest('.input-wrapper').style.transform = 'scale(1)';
                 });
             });
+            
+            // Log that everything is ready
+            setTimeout(() => {
+                console.log("Application ready. DB Ready:", dbReady);
+            }, 1000);
         };
     </script>
 </body>
