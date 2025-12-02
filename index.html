@@ -1112,13 +1112,14 @@
         </div>
     </div>
 
-    <!-- Scripts - FIXED -->
+    <!-- Scripts - FIXED AND SECURED -->
     <script>
         // Global Variables
         let db;
-        const dbName = "NatureLoversDB_v3";
+        const dbName = "NatureLoversDB_v4";
         const storeName = "Members";
         let currentUser = null;
+        let datepickerInitialized = false;
 
         // Initialize IndexedDB with FALLBACK
         function initDB() {
@@ -1130,7 +1131,7 @@
                     console.log("DB upgrade needed");
                     db = e.target.result;
                     if (!db.objectStoreNames.contains(storeName)) {
-                        db.createObjectStore(storeName, { keyPath: "nationalCode" });
+                        const store = db.createObjectStore(storeName, { keyPath: "nationalCode" });
                         console.log("Object store created");
                     }
                 };
@@ -1150,27 +1151,74 @@
             }
         }
 
-        // Initialize Persian Datepicker - FIXED
+        // FIXED: Initialize Persian Datepicker - SAFER VERSION
         document.addEventListener('DOMContentLoaded', function() {
             try {
-                $("#birthdate").pDatepicker({
-                    format: "YYYY/MM/DD",
-                    autoClose: true,
-                    calendarType: 'jalali',
-                    observer: true,
-                    initialValue: false,
-                    onSelect: function(unixDate) {
-                        if (unixDate) {
-                            const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
-                            document.getElementById('birthdate').value = selectedDate;
-                            document.getElementById('birthdateError').textContent = '';
+                const birthdateInput = document.getElementById('birthdate');
+                if (!birthdateInput) {
+                    console.error("Birthdate input not found - CRITICAL ERROR");
+                    showFallbackToast('خطای بحرانی: فیلد تاریخ یافت نشد');
+                    return;
+                }
+                
+                // Wait for libraries to load
+                setTimeout(() => {
+                    try {
+                        if ($.fn.pDatepicker) {
+                            $("#birthdate").pDatepicker({
+                                format: "YYYY/MM/DD",
+                                autoClose: true,
+                                calendarType: 'jalali',
+                                observer: false, // CHANGED: false to avoid conflicts
+                                initialValue: false,
+                                initialValueType: 'persian',
+                                onSelect: function(unixDate) {
+                                    try {
+                                        if (unixDate && unixDate > 0) {
+                                            const selectedDate = new persianDate(unixDate).format("YYYY/MM/DD");
+                                            if (birthdateInput) {
+                                                birthdateInput.value = selectedDate;
+                                                document.getElementById('birthdateError').textContent = '';
+                                            }
+                                        }
+                                    } catch (e) {
+                                        console.error("Date selection error:", e);
+                                        showToast('خطا در پردازش تاریخ', 'error');
+                                    }
+                                }
+                            });
+                            datepickerInitialized = true;
+                            console.log("Datepicker initialized successfully");
+                        } else {
+                            console.warn("pDatepicker function not available - using fallback");
+                            setupDateFallback();
                         }
+                    } catch (e) {
+                        console.error("Datepicker init error:", e);
+                        setupDateFallback();
                     }
-                });
+                }, 500);
+                
             } catch (e) {
-                console.error("Datepicker error:", e);
+                console.error("Datepicker outer error:", e);
+                setupDateFallback();
             }
         });
+
+        // Fallback for date input if datepicker fails
+        function setupDateFallback() {
+            const input = document.getElementById('birthdate');
+            if (input) {
+                input.placeholder = 'مثال: 1400/01/01';
+                input.addEventListener('input', function() {
+                    const value = this.value;
+                    if (/^\d{4}\/\d{2}\/\d{2}$/.test(value)) {
+                        document.getElementById('birthdateError').textContent = '';
+                    }
+                });
+                console.log("Date fallback setup completed");
+            }
+        }
 
         // Loading Screen - 2 Seconds Timer
         window.addEventListener('load', function() {
@@ -1180,14 +1228,14 @@
             
             const interval = setInterval(() => {
                 progress += 5;
-                percentage.textContent = `${Math.min(progress, 100)}%`;
+                if (percentage) percentage.textContent = `${Math.min(progress, 100)}%`;
                 
                 if (progress >= 100) {
                     clearInterval(interval);
                     setTimeout(() => {
-                        loadingScreen.classList.add('hidden');
+                        if (loadingScreen) loadingScreen.classList.add('hidden');
                         setTimeout(() => {
-                            loadingScreen.style.display = 'none';
+                            if (loadingScreen) loadingScreen.style.display = 'none';
                         }, 800);
                     }, 200);
                 }
@@ -1200,34 +1248,36 @@
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
                 toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
-                document.getElementById('toastContainer').appendChild(toast);
-                setTimeout(() => toast.classList.add('show'), 10);
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 300);
-                }, duration);
+                const container = document.getElementById('toastContainer');
+                if (container) {
+                    container.appendChild(toast);
+                    setTimeout(() => toast.classList.add('show'), 10);
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => toast.remove(), 300);
+                    }, duration);
+                }
             } catch (e) {
-                // Fallback to alert if toast fails
                 alert(message);
             }
         }
 
         // Fallback toast function
         function showFallbackToast(message) {
-            try {
-                showToast(message, 'error');
-            } catch (e) {
-                alert(message);
-            }
+            showToast(message, 'error');
         }
 
         // Radio Selection
         function selectRadio(value) {
+            if (!document.getElementById(value)) return;
             document.getElementById(value).checked = true;
             document.querySelectorAll('.radio-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            document.querySelector(`#${value}`).closest('.radio-card').classList.add('selected');
+            const cardElement = document.querySelector(`#${value}`);
+            if (cardElement && cardElement.closest('.radio-card')) {
+                cardElement.closest('.radio-card').classList.add('selected');
+            }
             document.getElementById('genderError').textContent = '';
         }
 
@@ -1238,25 +1288,32 @@
         }
 
         // Image Upload
-        document.getElementById('profileImage').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            if (file.size > 2 * 1024 * 1024) {
-                showToast('حجم تصویر نباید بیشتر از ۲ مگابایت باشد', 'error');
-                return;
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('profileImage');
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (file.size > 2 * 1024 * 1024) {
+                        showToast('حجم تصویر نباید بیشتر از ۲ مگابایت باشد', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const preview = document.getElementById('profilePreview');
+                        if (preview) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        }
+                    };
+                    reader.onerror = () => {
+                        showToast('خطا در خواندن تصویر', 'error');
+                    };
+                    reader.readAsDataURL(file);
+                });
             }
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const preview = document.getElementById('profilePreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.onerror = () => {
-                showToast('خطا در خواندن تصویر', 'error');
-            };
-            reader.readAsDataURL(file);
         });
 
         // Validation Functions
@@ -1330,13 +1387,17 @@
         };
 
         function showError(element, message) {
-            element.innerHTML = `<i class="fas fa-times-circle"></i> ${message}`;
+            if (element) {
+                element.innerHTML = `<i class="fas fa-times-circle"></i> ${message}`;
+            }
             return false;
         }
 
         function showSuccess(element) {
-            element.innerHTML = '<i class="fas fa-check-circle"></i> ✓';
-            element.style.color = 'var(--success-color)';
+            if (element) {
+                element.innerHTML = '<i class="fas fa-check-circle"></i> ✓';
+                element.style.color = 'var(--success-color)';
+            }
             return true;
         }
 
@@ -1361,58 +1422,98 @@
             return map[value] || '';
         }
 
+        // FIXED: Generate dates with error handling
         function generateDates() {
-            const today = new persianDate();
-            return {
-                issueDate: today.format('YYYY/MM/DD'),
-                expiryDate: today.add('year', 3).format('YYYY/MM/DD')
-            };
+            try {
+                if (typeof persianDate !== 'undefined') {
+                    const today = new persianDate();
+                    if (today && today.format) {
+                        return {
+                            issueDate: today.format('YYYY/MM/DD'),
+                            expiryDate: today.add('year', 3).format('YYYY/MM/DD')
+                        };
+                    }
+                }
+                // Fallback
+                const now = new Date();
+                return {
+                    issueDate: now.toLocaleDateString('fa-IR'),
+                    expiryDate: new Date(now.getFullYear() + 3, now.getMonth(), now.getDate()).toLocaleDateString('fa-IR')
+                };
+            } catch (e) {
+                console.error("Date generation error:", e);
+                const now = new Date();
+                return {
+                    issueDate: now.toISOString().split('T')[0],
+                    expiryDate: new Date(now.getFullYear() + 3, now.getMonth(), now.getDate()).toISOString().split('T')[0]
+                };
+            }
         }
 
         function saveMember(member, callback) {
             try {
+                if (!db) {
+                    showToast('پایگاه داده آماده نیست، لطفاً صبر کنید', 'error');
+                    setTimeout(() => saveMember(member, callback), 1000);
+                    return;
+                }
                 const tx = db.transaction([storeName], 'readwrite');
                 const store = tx.objectStore(storeName);
-                store.put(member).onsuccess = callback;
+                const request = store.put(member);
+                request.onsuccess = callback;
+                request.onerror = (e) => {
+                    console.error("Save error:", e);
+                    showToast('خطا در ذخیره‌سازی', 'error');
+                };
             } catch (e) {
-                console.error("Save error:", e);
-                showToast('خطا در ذخیره‌سازی', 'error');
+                console.error("Save exception:", e);
+                showToast('خطای ذخیره‌سازی: ' + e.message, 'error');
             }
         }
 
         function getMember(nationalCode, callback) {
             try {
+                if (!db) {
+                    showToast('پایگاه داده آماده نیست، لطفاً صبر کنید', 'error');
+                    setTimeout(() => getMember(nationalCode, callback), 500);
+                    return;
+                }
                 const tx = db.transaction([storeName], 'readonly');
                 const store = tx.objectStore(storeName);
-                store.get(nationalCode).onsuccess = (e) => callback(e.target.result);
+                const request = store.get(nationalCode);
+                request.onsuccess = (e) => callback(e.target.result);
+                request.onerror = (e) => {
+                    console.error("Get error:", e);
+                    showToast('خطا در بازیابی اطلاعات', 'error');
+                    callback(null);
+                };
             } catch (e) {
-                console.error("Get error:", e);
-                showToast('خطا در بازیابی اطلاعات', 'error');
+                console.error("Get exception:", e);
+                showToast('خطای بازیابی: ' + e.message, 'error');
+                callback(null);
             }
         }
 
-        // FIXED: Register Function
+        // FIXED: Register Function with DB readiness check
         function register() {
             console.log("=== REGISTER BUTTON CLICKED ===");
             
-            // Show loading state immediately
             const btn = document.getElementById('registerBtn');
             btn.innerHTML = '<div class="spinner"></div> در حال بررسی...';
             btn.disabled = true;
             
-            // Check if DB is ready
+            // Check DB readiness
             if (!db) {
-                console.log("DB not ready, waiting...");
+                console.log("DB not ready, retrying...");
                 setTimeout(() => {
                     btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
                     btn.disabled = false;
                     showToast('لطفاً چند ثانیه دیگر امتحان کنید', 'info');
-                }, 1000);
+                }, 1500);
                 return;
             }
 
             try {
-                // Validate all fields
                 let validationFailed = false;
                 Object.keys(validators).forEach(key => {
                     const result = validators[key]();
@@ -1427,7 +1528,6 @@
                     return;
                 }
 
-                // Create member object
                 const member = {
                     name: document.getElementById('name').value.trim(),
                     family: document.getElementById('family').value.trim(),
@@ -1445,7 +1545,6 @@
 
                 console.log("Member object created:", member);
 
-                // Check if user exists
                 getMember(member.nationalCode, (existing) => {
                     console.log("Check existing:", existing);
                     if (existing) {
@@ -1458,7 +1557,6 @@
                             showToast('✅ ثبت‌نام با موفقیت انجام شد!', 'success');
                             setTimeout(() => {
                                 showLogin();
-                                // Reset button
                                 btn.innerHTML = '<i class="fas fa-user-plus"></i> تکمیل ثبت‌نام';
                                 btn.disabled = false;
                             }, 2000);
@@ -1473,7 +1571,7 @@
             }
         }
 
-        // FIXED: Login Function
+        // FIXED: Login Function with DB readiness check
         function login() {
             console.log("=== LOGIN BUTTON CLICKED ===");
             
@@ -1481,14 +1579,13 @@
             btn.innerHTML = '<div class="spinner"></div> در حال ورود...';
             btn.disabled = true;
             
-            // Check if DB is ready
             if (!db) {
                 console.log("DB not ready");
                 setTimeout(() => {
                     btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
                     btn.disabled = false;
                     showToast('لطفاً چند ثانیه دیگر امتحان کنید', 'info');
-                }, 1000);
+                }, 1500);
                 return;
             }
 
@@ -1546,23 +1643,29 @@
 
             document.getElementById('cardName').textContent = `${currentUser.name} ${currentUser.family}`;
             document.getElementById('cardNationalCode').textContent = currentUser.nationalCode;
-            document.getElementById('cardIssueDate').textContent = currentUser.issueDate;
-            document.getElementById('cardExpiryDate').textContent = currentUser.expiryDate;
+            document.getElementById('cardIssueDate').textContent = currentUser.issueDate || 'ثبت نشده';
+            document.getElementById('cardExpiryDate').textContent = currentUser.expiryDate || 'ثبت نشده';
             
-            const interestsText = currentUser.interests.map(i => getInterestText(i)).join('، ');
-            document.getElementById('cardInterests').textContent = interestsText || 'ثبت نشده';
-            document.getElementById('cardPhoto').src = currentUser.imageData;
+            const interestsText = currentUser.interests ? currentUser.interests.map(i => getInterestText(i)).join('، ') : 'ثبت نشده';
+            document.getElementById('cardInterests').textContent = interestsText;
+            
+            const photo = document.getElementById('cardPhoto');
+            if (photo && currentUser.imageData) {
+                photo.src = currentUser.imageData;
+            }
 
             const qr = document.getElementById('qrcode');
-            qr.innerHTML = '';
-            new QRCode(qr, {
-                text: `https://nature-khn.ir/verify?code=${currentUser.nationalCode}`,
-                width: 90,
-                height: 90,
-                colorDark: "#1b4332",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            if (qr) {
+                qr.innerHTML = '';
+                new QRCode(qr, {
+                    text: `https://nature-khn.ir/verify?code=${currentUser.nationalCode}`,
+                    width: 90,
+                    height: 90,
+                    colorDark: "#1b4332",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
         }
 
         function downloadIDCard() {
@@ -1609,23 +1712,31 @@
             // Add focus animations
             document.querySelectorAll('input, textarea').forEach(input => {
                 input.addEventListener('focus', () => {
-                    input.closest('.input-wrapper').style.transform = 'scale(1.02)';
+                    const wrapper = input.closest('.input-wrapper');
+                    if (wrapper) wrapper.style.transform = 'scale(1.02)';
                 });
                 input.addEventListener('blur', () => {
-                    input.closest('.input-wrapper').style.transform = 'scale(1)';
+                    const wrapper = input.closest('.input-wrapper');
+                    if (wrapper) wrapper.style.transform = 'scale(1)';
                 });
             });
             
             // IMPORTANT: Force button to work even if clicked before DB is ready
-            document.getElementById('registerBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                register();
-            });
+            const registerBtn = document.getElementById('registerBtn');
+            if (registerBtn) {
+                registerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    register();
+                });
+            }
             
-            document.getElementById('loginBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                login();
-            });
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    login();
+                });
+            }
             
             console.log("All event listeners attached");
         };
